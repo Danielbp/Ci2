@@ -179,8 +179,8 @@ var LogIn = React.createClass ({
     render : function(){
         return (
             <ul className="login">
-                <li><a onClick={this.handleLogin} href="#" className="filledBtn">LOG IN</a></li>
-                <li><a onClick={this.handleLogout} href="#" className="transBtn">LOG OUT</a></li>
+                <li><a onClick={this.handleLogin} href="index.html" className="filledBtn">LOG IN</a></li>
+                <li><a onClick={this.handleLogout} href="pages/login.html" className="transBtn">LOG OUT</a></li>
             </ul>
         );
     }
@@ -189,13 +189,5 @@ var LogIn = React.createClass ({
 
 export default LogIn;
 export default Container;
-
-/*
- ReactDOM.render(
- <LogIn />,
- document.getElementById('example')
- );
-
- */
 
 

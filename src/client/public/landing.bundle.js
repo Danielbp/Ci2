@@ -46,46 +46,130 @@
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
 	var _reactDom = __webpack_require__(158);
 
-	var _main = __webpack_require__(159);
-
-	var _main2 = _interopRequireDefault(_main);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var Landing = _react2.default.createClass({
+	    displayName: 'Landing',
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var App = function (_React$Component) {
-	    _inherits(App, _React$Component);
-
-	    function App() {
-	        _classCallCheck(this, App);
-
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'container' },
+	            _react2.default.createElement(
+	                'header',
+	                { className: 'main-header' },
+	                _react2.default.createElement(
+	                    'a',
+	                    { className: 'site-logo', href: '#logo' },
+	                    _react2.default.createElement('img', { src: '', alt: '' })
+	                ),
+	                _react2.default.createElement(
+	                    'ul',
+	                    { className: 'nav' },
+	                    _react2.default.createElement(
+	                        'li',
+	                        null,
+	                        _react2.default.createElement(
+	                            'a',
+	                            { className: 'active', href: '#home' },
+	                            'Home'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'li',
+	                        null,
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '#contact' },
+	                            'Contact'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'li',
+	                        null,
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '#about' },
+	                            'About'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'ul',
+	                    { className: 'login' },
+	                    _react2.default.createElement(
+	                        'li',
+	                        null,
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '#', className: 'transBtn' },
+	                            'SIGN UP'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'li',
+	                        null,
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '../index.html', className: 'filledBtn' },
+	                            'LOG IN'
+	                        )
+	                    )
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'main',
+	                { className: 'main' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'wrap-content' },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        null,
+	                        'Common interest finder'
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'A way to find friends and like-minded people with emia, chatt or Meetups'
+	                    ),
+	                    _react2.default.createElement(
+	                        'ul',
+	                        { className: 'info' },
+	                        _react2.default.createElement(
+	                            'li',
+	                            null,
+	                            _react2.default.createElement(
+	                                'a',
+	                                { href: '#', className: 'transBtn' },
+	                                'Learn More'
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'li',
+	                            null,
+	                            _react2.default.createElement(
+	                                'a',
+	                                { href: '#', className: 'filledBtn' },
+	                                'Continue'
+	                            )
+	                        )
+	                    )
+	                )
+	            ),
+	            _react2.default.createElement('footer', { className: 'footer' })
+	        );
 	    }
 
-	    _createClass(App, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(_main2.default, null);
-	        }
-	    }]);
+	});
 
-	    return App;
-	}(_react2.default.Component);
-
-	(0, _reactDom.render)(_react2.default.createElement(App, null), document.getElementById('app'));
+	(0, _reactDom.render)(_react2.default.createElement(Landing, null), document.getElementById('landing'));
 
 /***/ },
 /* 1 */
@@ -19687,371 +19771,6 @@
 
 	module.exports = __webpack_require__(3);
 
-
-/***/ },
-/* 159 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Pushboxes = _react2.default.createClass({
-	    displayName: "Pushboxes",
-
-	    render: function render() {
-	        var rows = [];
-	        var numrows = 1;
-	        for (var i = 0; i < numrows; i++) {
-	            rows.push(_react2.default.createElement(SkillBox, { key: i }));
-	        }
-	        return _react2.default.createElement(
-	            "div",
-	            { className: "mainContainer" },
-	            rows
-	        );
-	    }
-
-	});
-
-	var Container = _react2.default.createClass({
-	    displayName: "Container",
-
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "div",
-	            { className: "container" },
-	            _react2.default.createElement(Header, null),
-	            _react2.default.createElement(Main, null)
-	        );
-	    }
-
-	});
-
-	var Header = _react2.default.createClass({
-	    displayName: "Header",
-
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "header",
-	            { className: "main-header" },
-	            _react2.default.createElement(
-	                "a",
-	                { className: "site-logo", href: "#logo" },
-	                _react2.default.createElement("img", { src: "", alt: "" })
-	            ),
-	            _react2.default.createElement(
-	                "ul",
-	                { className: "nav" },
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "a",
-	                        { className: "active", href: "#home" },
-	                        "Home"
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "a",
-	                        { href: "#contact" },
-	                        "Contact"
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "li",
-	                    null,
-	                    _react2.default.createElement(
-	                        "a",
-	                        { href: "#about" },
-	                        "About"
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(LogIn, null)
-	        );
-	    }
-
-	});
-
-	var Main = _react2.default.createClass({
-	    displayName: "Main",
-
-	    getInitialState: function getInitialState() {
-	        return {
-	            showUserProfile: false,
-	            showUserSkills: false
-
-	        };
-	    },
-	    onClickProfile: function onClickProfile() {
-	        this.setState({
-	            showUserProfile: true,
-	            showUserSkills: false
-	        });
-	    },
-	    onClickSkills: function onClickSkills() {
-	        this.setState({
-	            showUserSkills: true,
-	            showUserProfile: false
-	        });
-	    },
-	    onClickMessage: function onClickMessage() {
-	        this.setState({
-	            showUserMessage: true,
-	            showUserProfile: false,
-	            showUserSkills: false
-	        });
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "main",
-	            { className: "main" },
-	            _react2.default.createElement(
-	                "div",
-	                { className: "wrap-profiles" },
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "profile-container" },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "profile-auth" },
-	                        _react2.default.createElement("div", { className: "user-avatar" }),
-	                        _react2.default.createElement(
-	                            "div",
-	                            { className: "user-name-box" },
-	                            _react2.default.createElement(
-	                                "h4",
-	                                null,
-	                                "Daniel Bernal Perez"
-	                            ),
-	                            _react2.default.createElement(
-	                                "h5",
-	                                null,
-	                                "Front-End Developer"
-	                            )
-	                        ),
-	                        _react2.default.createElement("div", { className: "user-social-media" })
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "profile-nav" },
-	                        _react2.default.createElement(
-	                            "ul",
-	                            { className: "user-nav" },
-	                            _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                    "a",
-	                                    { href: "#", onClick: this.onClickProfile },
-	                                    _react2.default.createElement("i", { className: "fa fa-user" })
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                    "a",
-	                                    { href: "#", onClick: this.onClickSkills },
-	                                    _react2.default.createElement("i", { className: "fa fa-diamond" })
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                    "a",
-	                                    { href: "#" },
-	                                    _react2.default.createElement("i", { className: "fa fa-envelope-o" })
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                    "a",
-	                                    { href: "#" },
-	                                    _react2.default.createElement("i", { className: "fa fa-comment" })
-	                                )
-	                            )
-	                        )
-	                    ),
-	                    this.state.showUserProfile ? _react2.default.createElement(UserProfile, null) : null,
-	                    this.state.showUserSkills ? _react2.default.createElement(UserSkills, null) : null
-	                )
-	            )
-	        );
-	    }
-
-	});
-
-	var UserSkills = _react2.default.createClass({
-	    displayName: "UserSkills",
-
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "div",
-	            { className: "profile-info" },
-	            _react2.default.createElement(
-	                "p",
-	                null,
-	                _react2.default.createElement(
-	                    "strong",
-	                    null,
-	                    "My Skills"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "progressBar" },
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "progressBarContainer" },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "progressBarValue value-90 pbb" },
-	                        "HTML5"
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "progressBar" },
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "progressBarContainer" },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "progressBarValue value-80 pby" },
-	                        "CSS3"
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "progressBar" },
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "progressBarContainer" },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "progressBarValue value-30 pbg" },
-	                        "Javascript"
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "progressBar" },
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "progressBarContainer" },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "progressBarValue value-70 pbr" },
-	                        "WordPress"
-	                    )
-	                )
-	            )
-	        );
-	    }
-
-	});
-
-	var UserProfile = _react2.default.createClass({
-	    displayName: "UserProfile",
-
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "div",
-	            { className: "profile-info" },
-	            _react2.default.createElement(
-	                "p",
-	                null,
-	                _react2.default.createElement(
-	                    "strong",
-	                    null,
-	                    "About Me"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "p",
-	                null,
-	                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies porttitor elementum. Morbi eu risus justo. Etiam molestie, urna vitae euismod hendrerit, velit nibh porttitor nulla, sit amet tristique magna neque sit amet leo."
-	            )
-	        );
-	    }
-
-	});
-
-	var ref = new Firebase("https://commoni.firebaseio.com/");
-	//Entire NAV will be added through React use map to add the uls in right order
-	var LogIn = _react2.default.createClass({
-	    displayName: "LogIn",
-
-
-	    handleLogin: function handleLogin() {
-	        ref.authWithOAuthPopup("google", function (error, authData) {
-	            if (error) {
-	                console.log("Login Failed!", error);
-	            } else {
-	                console.log("Authenticated successfully with payload:", authData);
-	            }
-	            if (authData != null) {
-	                console.log("Loged in");
-	            } else {
-	                console.log("Not Loged in");
-	            }
-	        }, {
-	            remember: "sessionOnly",
-	            scope: "email"
-	        });
-	    },
-	    handleLogout: function handleLogout() {
-	        ref.unauth();
-	        console.log("Loged Out");
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "ul",
-	            { className: "login" },
-	            _react2.default.createElement(
-	                "li",
-	                null,
-	                _react2.default.createElement(
-	                    "a",
-	                    { onClick: this.handleLogin, href: "index.html", className: "filledBtn" },
-	                    "LOG IN"
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "li",
-	                null,
-	                _react2.default.createElement(
-	                    "a",
-	                    { onClick: this.handleLogout, href: "pages/login.html", className: "transBtn" },
-	                    "LOG OUT"
-	                )
-	            )
-	        );
-	    }
-
-	});
-
-	exports.default = LogIn;
-	exports.default = Container;
 
 /***/ }
 /******/ ]);
