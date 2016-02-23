@@ -19790,7 +19790,7 @@
 
 	    getInitialState: function getInitialState() {
 	        return {
-	            showUserProfile: false,
+	            showUserProfile: true,
 	            showUserSkills: false
 
 	        };
@@ -19900,7 +19900,29 @@
 	var UserSkills = _react2.default.createClass({
 	    displayName: "UserSkills",
 
+	    getInitialState: function getInitialState() {
+	        return {
+	            inputs: []
+	        };
+	    },
+	    addInputField: function addInputField(e) {
+	        e.preventDefault();
+
+	        var inputs = this.state.inputs;
+	        inputs.push({ name: null });
+	        this.setState({ inputs: inputs });
+	    },
+	    removeInputField: function removeInputField(index) {
+	        var inputs = this.state.inputs;
+	        inputs.splice(index, 1);
+	        this.setState({ inputs: inputs });
+	    },
+	    handleSubmit: function handleSubmit(e) {
+	        e.preventDefault();
+	        // What do I do here?
+	    },
 	    render: function render() {
+	        var inputs = this.state.inputs;
 	        return _react2.default.createElement(
 	            "div",
 	            { className: "profile-info" },
@@ -19914,65 +19936,44 @@
 	                )
 	            ),
 	            _react2.default.createElement(
-	                "div",
-	                { className: "progressBar" },
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "progressBarContainer" },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "progressBarValue value-90 pbb" },
-	                        "HTML5"
-	                    )
-	                )
+	                "a",
+	                { href: "#", onClick: this.addInputField },
+	                _react2.default.createElement("i", { className: "fa fa-plus" })
 	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "progressBar" },
-	                _react2.default.createElement(
+	            inputs.map(function (input, index) {
+	                var ref = "input_" + index;
+	                return _react2.default.createElement(
 	                    "div",
-	                    { className: "progressBarContainer" },
+	                    { className: "progressBar", key: index },
 	                    _react2.default.createElement(
 	                        "div",
-	                        { className: "progressBarValue value-80 pby" },
-	                        "CSS3"
+	                        { className: "progressBarContainer" },
+	                        _react2.default.createElement(
+	                            "div",
+	                            { className: "progressBarValue value-90 pbb" },
+	                            _react2.default.createElement("input", { type: "text", placeholder: "Enter Skill", value: input.name, ref: ref, "aria-describedby": ref }),
+	                            _react2.default.createElement(
+	                                "span",
+	                                { onClick: this.removeInputField.bind(this, index), id: ref },
+	                                _react2.default.createElement("i", { className: "fa fa-times" })
+	                            )
+	                        )
 	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "progressBar" },
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "progressBarContainer" },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "progressBarValue value-30 pbg" },
-	                        "Javascript"
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                "div",
-	                { className: "progressBar" },
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "progressBarContainer" },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "progressBarValue value-70 pbr" },
-	                        "WordPress"
-	                    )
-	                )
-	            )
+	                );
+	            }.bind(this))
 	        );
 	    }
-
 	});
 
 	var UserProfile = _react2.default.createClass({
 	    displayName: "UserProfile",
 
+	    getInitialState: function getInitialState() {
+	        return { value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies porttitor elementum. Morbi eu risus justo. Etiam molestie, urna vitae euismod hendrerit, velit nibh porttitor nulla, sit amet tristique magna neque sit amet leo.' };
+	    },
+	    handleChange: function handleChange(event) {
+	        this.setState({ value: event.target.value });
+	    },
 	    render: function render() {
 	        return _react2.default.createElement(
 	            "div",
@@ -19986,11 +19987,11 @@
 	                    "About Me"
 	                )
 	            ),
-	            _react2.default.createElement(
-	                "p",
-	                null,
-	                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies porttitor elementum. Morbi eu risus justo. Etiam molestie, urna vitae euismod hendrerit, velit nibh porttitor nulla, sit amet tristique magna neque sit amet leo."
-	            )
+	            _react2.default.createElement("textarea", {
+	                type: "text",
+	                value: this.state.value,
+	                onChange: this.handleChange
+	            })
 	        );
 	    }
 

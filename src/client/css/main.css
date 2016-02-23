@@ -104,6 +104,15 @@ p {
         padding-top: 0;
         color: black;
         height: 320px; }
+        .main .wrap-profiles .profile-container .profile-info input {
+          background: transparent;
+          border: transparent; }
+        .main .wrap-profiles .profile-container .profile-info textarea {
+          width: 285px;
+          height: 250px;
+          border: none;
+          overflow: auto;
+          outline-color: #FE6F6F; }
         .main .wrap-profiles .profile-container .profile-info p {
           margin: 0;
           margin-bottom: 1em; }

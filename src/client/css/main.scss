@@ -176,6 +176,19 @@ p{
         color: black;
         height: 320px;
 
+        input {
+          background: transparent;
+          border: transparent;
+        }
+
+        textarea {
+          width: 285px;
+          height: 250px;
+          border: none;
+          overflow: auto;
+          outline-color: $color-secondary-1-0;
+        }
+
         p {
           margin: 0;
           margin-bottom: 1em;
@@ -245,7 +258,6 @@ p{
   .wrap-content {
     margin: auto 0;
     text-align: center;
-
 
     .info{
       list-style: none;

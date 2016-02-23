@@ -46,7 +46,7 @@ var Header = React.createClass({
 var Main = React.createClass({
     getInitialState: function() {
         return {
-            showUserProfile: false,
+            showUserProfile: true,
             showUserSkills: false
 
         };
@@ -103,46 +103,67 @@ var Main = React.createClass({
 });
 
 var UserSkills = React.createClass({
+    getInitialState: function(){
+        return {
+            inputs : []
+        };
+    },
+    addInputField: function(e) {
+        e.preventDefault();
+
+        var inputs = this.state.inputs;
+        inputs.push({name: null});
+        this.setState({inputs : inputs});
+    },
+    removeInputField: function(index) {
+        var inputs = this.state.inputs;
+        inputs.splice(index, 1);
+        this.setState({inputs : inputs});
+    },
+    handleSubmit: function (e) {
+        e.preventDefault();
+        // What do I do here?
+    },
     render: function(){
+        var inputs = this.state.inputs;
         return (
             <div className="profile-info">
                 <p><strong>My Skills</strong></p>
-                <div className="progressBar">
-                    <div className="progressBarContainer">
-                        <div className="progressBarValue value-90 pbb">HTML5</div>
-                    </div>
-                </div>
-                <div className="progressBar">
-                    <div className="progressBarContainer">
-                        <div className="progressBarValue value-80 pby">CSS3</div>
-                    </div>
-                </div>
-                <div className="progressBar">
-                    <div className="progressBarContainer">
-                        <div className="progressBarValue value-30 pbg">Javascript</div>
-                    </div>
-                </div>
-                <div className="progressBar">
-                    <div className="progressBarContainer">
-                        <div className="progressBarValue value-70 pbr">WordPress</div>
-                    </div>
-                </div>
-
+                    <a href="#" onClick={this.addInputField}><i className="fa fa-plus"></i></a>
+                {inputs.map(function (input, index) {
+                    var ref = "input_" + index;
+                    return (
+                        <div className="progressBar" key={index}>
+                            <div className="progressBarContainer">
+                                <div className="progressBarValue value-90 pbb">
+                                    <input type="text" placeholder="Enter Skill" value={input.name} ref={ref} aria-describedby={ref}/>
+                                    <span onClick={this.removeInputField.bind(this, index)} id={ref} ><i className="fa fa-times"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }.bind(this))}
             </div>
         );
     }
-
 });
 
 var UserProfile = React.createClass({
+    getInitialState: function(){
+        return {value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies porttitor elementum. Morbi eu risus justo. Etiam molestie, urna vitae euismod hendrerit, velit nibh porttitor nulla, sit amet tristique magna neque sit amet leo.'};
+    },
+    handleChange: function(event){
+        this.setState({value: event.target.value})
+    },
     render: function(){
         return (
             <div className="profile-info">
                 <p><strong>About Me</strong></p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies porttitor elementum.
-                    Morbi eu risus justo. Etiam molestie, urna vitae euismod hendrerit,
-                    velit nibh porttitor nulla, sit amet tristique magna neque sit amet leo.
-                </p>
+                <textarea
+                    type="text"
+                    value={this.state.value}
+                    onChange={this.handleChange}
+                />
             </div>
         );
     }
@@ -155,20 +176,20 @@ var LogIn = React.createClass ({
 
     handleLogin: function (){
         ref.authWithOAuthPopup("google", function(error, authData) {
-            if (error) {
-                console.log("Login Failed!", error);
-            } else {
-                console.log("Authenticated successfully with payload:", authData);
-            }
-            if (authData != null) {
-                console.log("Loged in");
-            } else {
-                console.log("Not Loged in");
-            }
-        },
+                if (error) {
+                    console.log("Login Failed!", error);
+                } else {
+                    console.log("Authenticated successfully with payload:", authData);
+                }
+                if (authData != null) {
+                    console.log("Loged in");
+                } else {
+                    console.log("Not Loged in");
+                }
+            },
             {
-            remember: "sessionOnly",
-            scope: "email"
+                remember: "sessionOnly",
+                scope: "email"
             });
     },
     handleLogout: function (){
