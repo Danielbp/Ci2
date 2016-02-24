@@ -19902,7 +19902,9 @@
 
 	    getInitialState: function getInitialState() {
 	        return {
-	            inputs: []
+	            inputs: [],
+	            remove: "visible removeSkill",
+	            edit: "visible"
 	        };
 	    },
 	    addInputField: function addInputField(e) {
@@ -19921,6 +19923,15 @@
 	        e.preventDefault();
 	        // What do I do here?
 	    },
+	    editSkills: function editSkills() {
+	        if (this.state.edit === "visible" && this.state.remove === "visible removeSkill") {
+	            this.setState({ edit: "hidden" });
+	            this.setState({ remove: "hidden removeSkill" });
+	        } else {
+	            this.setState({ edit: "visible" });
+	            this.setState({ remove: "visible removeSkill" });
+	        }
+	    },
 	    render: function render() {
 	        var inputs = this.state.inputs;
 	        return _react2.default.createElement(
@@ -19936,8 +19947,13 @@
 	                )
 	            ),
 	            _react2.default.createElement(
-	                "a",
-	                { href: "#", onClick: this.addInputField },
+	                "span",
+	                { onClick: this.editSkills, onClick: this.editSkills },
+	                _react2.default.createElement("i", { className: "fa fa-pencil" })
+	            ),
+	            _react2.default.createElement(
+	                "span",
+	                { className: this.state.edit, onClick: this.addInputField },
 	                _react2.default.createElement("i", { className: "fa fa-plus" })
 	            ),
 	            inputs.map(function (input, index) {
@@ -19954,13 +19970,65 @@
 	                            _react2.default.createElement("input", { type: "text", placeholder: "Enter Skill", value: input.name, ref: ref, "aria-describedby": ref }),
 	                            _react2.default.createElement(
 	                                "span",
-	                                { onClick: this.removeInputField.bind(this, index), id: ref },
+	                                { className: this.state.remove, onClick: this.removeInputField.bind(this, index), id: ref },
 	                                _react2.default.createElement("i", { className: "fa fa-times" })
 	                            )
 	                        )
 	                    )
 	                );
-	            }.bind(this))
+	            }.bind(this)),
+	            _react2.default.createElement(
+	                "div",
+	                { className: "progressBar" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "progressBarContainer" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "progressBarValue value-90 pbb" },
+	                        "HTML5"
+	                    )
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "div",
+	                { className: "progressBar" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "progressBarContainer" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "progressBarValue value-80 pby" },
+	                        "CSS3"
+	                    )
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "div",
+	                { className: "progressBar" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "progressBarContainer" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "progressBarValue value-30 pbg" },
+	                        "Javascript"
+	                    )
+	                )
+	            ),
+	            _react2.default.createElement(
+	                "div",
+	                { className: "progressBar" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "progressBarContainer" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "progressBarValue value-70 pbr" },
+	                        "WordPress"
+	                    )
+	                )
+	            )
 	        );
 	    }
 	});

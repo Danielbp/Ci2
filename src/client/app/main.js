@@ -105,7 +105,9 @@ var Main = React.createClass({
 var UserSkills = React.createClass({
     getInitialState: function(){
         return {
-            inputs : []
+            inputs : [],
+            remove: "visible removeSkill",
+            edit: "visible"
         };
     },
     addInputField: function(e) {
@@ -124,12 +126,22 @@ var UserSkills = React.createClass({
         e.preventDefault();
         // What do I do here?
     },
+    editSkills: function () {
+        if (this.state.edit === "visible" && this.state.remove === "visible removeSkill"){
+            this.setState({edit: "hidden"});
+            this.setState({remove: "hidden removeSkill"});
+        } else {
+            this.setState({edit: "visible"});
+            this.setState({remove: "visible removeSkill"});
+        }
+    },
     render: function(){
         var inputs = this.state.inputs;
         return (
             <div className="profile-info">
                 <p><strong>My Skills</strong></p>
-                    <a href="#" onClick={this.addInputField}><i className="fa fa-plus"></i></a>
+                <span onClick={this.editSkills} onClick={this.editSkills}><i className="fa fa-pencil"></i></span>
+                <span className={this.state.edit} onClick={this.addInputField}><i className="fa fa-plus"></i></span>
                 {inputs.map(function (input, index) {
                     var ref = "input_" + index;
                     return (
@@ -137,12 +149,32 @@ var UserSkills = React.createClass({
                             <div className="progressBarContainer">
                                 <div className="progressBarValue value-90 pbb">
                                     <input type="text" placeholder="Enter Skill" value={input.name} ref={ref} aria-describedby={ref}/>
-                                    <span onClick={this.removeInputField.bind(this, index)} id={ref} ><i className="fa fa-times"></i></span>
+                                    <span className={this.state.remove} onClick={this.removeInputField.bind(this, index)} id={ref} ><i className="fa fa-times"></i></span>
                                 </div>
                             </div>
                         </div>
                     )
                 }.bind(this))}
+                <div className="progressBar">
+                    <div className="progressBarContainer">
+                        <div className="progressBarValue value-90 pbb">HTML5</div>
+                    </div>
+                </div>
+                <div className="progressBar">
+                    <div className="progressBarContainer">
+                        <div className="progressBarValue value-80 pby">CSS3</div>
+                    </div>
+                </div>
+                <div className="progressBar">
+                    <div className="progressBarContainer">
+                        <div className="progressBarValue value-30 pbg">Javascript</div>
+                    </div>
+                </div>
+                <div className="progressBar">
+                    <div className="progressBarContainer">
+                        <div className="progressBarValue value-70 pbr">WordPress</div>
+                    </div>
+                </div>
             </div>
         );
     }

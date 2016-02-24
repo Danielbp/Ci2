@@ -176,6 +176,32 @@ p{
         color: black;
         height: 320px;
 
+        i{
+          cursor: pointer;
+        }
+
+        span {
+          width: 30px;
+          margin-bottom: 5px;
+        }
+
+        .addSkill{
+
+        }
+
+        .hidden{
+          visibility: visible;
+        }
+
+        .visible{
+          visibility: hidden;
+        }
+
+        .removeSkill {
+          position: absolute;
+          margin-left: 80px;
+        }
+
         input {
           background: transparent;
           border: transparent;
@@ -435,8 +461,8 @@ p{
   }
 
   .login {
-      margin-top: 0;
-      margin-right: auto;
+    margin-top: 0;
+    margin-right: auto;
 
     li{
       margin-left: 0.65em;

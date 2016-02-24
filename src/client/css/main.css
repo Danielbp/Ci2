@@ -104,6 +104,18 @@ p {
         padding-top: 0;
         color: black;
         height: 320px; }
+        .main .wrap-profiles .profile-container .profile-info i {
+          cursor: pointer; }
+        .main .wrap-profiles .profile-container .profile-info span {
+          width: 30px;
+          margin-bottom: 5px; }
+        .main .wrap-profiles .profile-container .profile-info .hidden {
+          visibility: visible; }
+        .main .wrap-profiles .profile-container .profile-info .visible {
+          visibility: hidden; }
+        .main .wrap-profiles .profile-container .profile-info .removeSkill {
+          position: absolute;
+          margin-left: 80px; }
         .main .wrap-profiles .profile-container .profile-info input {
           background: transparent;
           border: transparent; }
