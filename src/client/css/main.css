@@ -47,6 +47,11 @@ p {
 .main-header {
   padding-top: 2em; }
 
+.Search {
+  width: 450px;
+  margin: 0 auto;
+  color: black; }
+
 .main {
   height: 700px;
   align-items: center; }

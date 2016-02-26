@@ -1,22 +1,113 @@
 import React from 'react';
 
-var Pushboxes = React.createClass({
-    render: function(){
-        var rows = [];
-        var numrows = 1;
-        for (var i=0; i < numrows; i++) {
-            rows.push(<SkillBox key={i}  />);
+var user = {
+    name: ''
+};
+
+//Entire NAV will be added through React use map to add the uls in right order
+var LogIn = React.createClass ({
+    handleLogin: function (){
+        var isNewUser = true;
+        var ref = new Firebase("https://commoni.firebaseio.com/");
+        ref.authWithOAuthPopup("google", function(error, authData, userName) {
+            if (error) {
+                console.log("Login Failed!", error);
+            } else if(authData) {
+                console.log("Logged in as", authData);
+                user.name = authData.google.displayName;
+                //Find out how to display this information in other components
+                console.log("Welcome " + user.name);
+            }
+        });
+        ref.onAuth(function(authData) {
+                if (authData && isNewUser) {
+                    // save the user's profile into the database so we can list users,
+                    // use them in Security and Firebase Rules, and show profiles
+                    ref.child("users").child(authData.uid).set({
+                        provider: authData.provider,
+                        name: getName(authData)
+                    });
+                }
+        });
+        function getName(authData) {
+            switch(authData.provider) {
+                case 'password':
+                    return authData.password.email.replace(/@.*/, '');
+                case 'google':
+                    return authData.google.displayName;
+            }
         }
-        return <div className="mainContainer">{rows}</div>;
+    },
+    handleLogout: function (){
+        var ref = new Firebase("https://commoni.firebaseio.com/");
+        ref.unauth();
+        console.log("Logged Out")
+
+    },
+    render : function(){
+        return (
+            <ul className="login">
+                <li><a onClick={this.handleLogin} href="#" className="filledBtn">LOG IN</a></li>
+                <li><a onClick={this.handleLogout} href="#" className="transBtn">LOG OUT</a></li>
+            </ul>
+        );
     }
 
 });
 
+
+var SearchBox = React.createClass({
+
+    propTypes: {
+        onSearch: React.PropTypes.func.isRequired
+    },
+
+    // grab the query value and put it into state
+    // as the value may mutate as the user types
+    getInitialState: function() {
+        return {
+            query: this.props.query || ''
+        };
+    },
+
+    // if a change is ever propogated through properties
+    componentWillReceiveProps: function(nextProps) {
+        this.setState({ query: nextProps.query || '' });
+    },
+
+    doSearch:function(event){
+        // grab the new value from the input text box
+        var newQuery = event.target.value || '';
+        this.setState({ query: newQuery });
+
+        this.props.onSearch.call(this, newQuery);
+    },
+    render:function(){
+        return (<input type="text"
+                       className="Search"
+                       placeholder="Search Name"
+                       value={ this.state.query }
+                       onChange={ this.doSearch }/>);
+    }
+});
+
 var Container = React.createClass({
+    getInitialState: function() {
+        return {
+            sweden: "sweden",
+            stockholm: "stockholm"
+
+        };
+    },
+    _onSearch: function(query) {
+        console.log(query);
+        var test = query;
+    },
     render: function(){
         return (
             <div className="container">
                 <Header />
+                <SearchBox onSearch={ this._onSearch } />
                 <Main />
             </div>
         );
@@ -44,6 +135,18 @@ var Header = React.createClass({
 });
 
 var Main = React.createClass({
+    render: function(){
+        return (
+            <main className="main" >
+                <div className="wrap-profiles">
+                    <ProfileContainer />
+                </div>
+            </main>
+        );
+    }
+});
+
+var ProfileContainer = React.createClass({
     getInitialState: function() {
         return {
             showUserProfile: true,
@@ -72,31 +175,28 @@ var Main = React.createClass({
     },
     render: function(){
         return (
-            <main className="main" >
-                <div className="wrap-profiles">
-                    <div className="profile-container">
-                        <div className="profile-auth">
-                            <div className="user-avatar"></div>
-                            <div className="user-name-box">
-                                <h4>Daniel Bernal Perez</h4>
-                                <h5>Front-End Developer</h5>
-                            </div>
-                            <div className="user-social-media"></div>
 
-                        </div>
-                        <div className="profile-nav">
-                            <ul className="user-nav">
-                                <li><a href="#" onClick={this.onClickProfile}><i className="fa fa-user"></i></a></li>
-                                <li><a href="#" onClick={this.onClickSkills}><i className="fa fa-diamond"></i></a></li>
-                                <li><a href="#"><i className="fa fa-envelope-o"></i></a></li>
-                                <li><a href="#"><i className="fa fa-comment"></i></a></li>
-                            </ul>
-                        </div>
-                        { this.state.showUserProfile ? <UserProfile /> : null }
-                        { this.state.showUserSkills ? <UserSkills /> : null }
+            <div className="profile-container">
+                <div className="profile-auth">
+                    <div className="user-avatar"></div>
+                    <div className="user-name-box">
+                        <h4></h4>
+                        <h5>Front-End Developer</h5>
                     </div>
+                    <div className="user-social-media"></div>
+
                 </div>
-            </main>
+                <div className="profile-nav">
+                    <ul className="user-nav">
+                        <li><a href="#" onClick={this.onClickProfile}><i className="fa fa-user"></i></a></li>
+                        <li><a href="#" onClick={this.onClickSkills}><i className="fa fa-diamond"></i></a></li>
+                        <li><a href="#"><i className="fa fa-envelope-o"></i></a></li>
+                        <li><a href="#"><i className="fa fa-comment"></i></a></li>
+                    </ul>
+                </div>
+                { this.state.showUserProfile ? <UserProfile /> : null }
+                { this.state.showUserSkills ? <UserSkills /> : null }
+            </div>
         );
     }
 
@@ -202,45 +302,6 @@ var UserProfile = React.createClass({
 
 });
 
-var ref = new Firebase("https://commoni.firebaseio.com/");
-//Entire NAV will be added through React use map to add the uls in right order
-var LogIn = React.createClass ({
-
-    handleLogin: function (){
-        ref.authWithOAuthPopup("google", function(error, authData) {
-                if (error) {
-                    console.log("Login Failed!", error);
-                } else {
-                    console.log("Authenticated successfully with payload:", authData);
-                }
-                if (authData != null) {
-                    console.log("Loged in");
-                } else {
-                    console.log("Not Loged in");
-                }
-            },
-            {
-                remember: "sessionOnly",
-                scope: "email"
-            });
-    },
-    handleLogout: function (){
-        ref.unauth();
-        console.log("Loged Out")
-
-    },
-    render : function(){
-        return (
-            <ul className="login">
-                <li><a onClick={this.handleLogin} href="index.html" className="filledBtn">LOG IN</a></li>
-                <li><a onClick={this.handleLogout} href="pages/login.html" className="transBtn">LOG OUT</a></li>
-            </ul>
-        );
-    }
-
-});
-
-export default LogIn;
 export default Container;
 
 
