@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-var Landing = React.createClass({
+var Contact = React.createClass({
     render: function(){
         return (
             <div className="container">
@@ -22,12 +22,11 @@ var Landing = React.createClass({
 
                 <main className="main" >
                     <div className="wrap-content">
-                        <h1>Common interest finder</h1>
-                        <p>A way to find friends and like-minded people with emia, chatt or Meetups</p>
-                        <ul className="info">
-                            <li><a href="#" className="transBtn">Learn More</a></li>
-                            <li><a href="#" className="filledBtn">Continue</a></li>
-                        </ul>
+                        <h1>About</h1>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean facilisis mi arcu, non cursus lacus cursus congue. Quisque molestie porttitor turpis, ac lobortis purus. Sed eget nisl porta ante tincidunt consectetur ut et quam. Aenean ultricies tempus ligula sagittis iaculis. Suspendisse ultrices fringilla facilisis. Praesent euismod porta suscipit. Ut varius massa non tortor euismod, vitae egestas neque vulputate.
+
+                        </p>
                     </div>
                 </main>
 
@@ -38,15 +37,4 @@ var Landing = React.createClass({
 
 });
 
-export default Landing;
-
-
-/*
-render(
-
-    <Landing />,
-    document.getElementById('landing')
-
-
-);
-    */
+export default Contact;

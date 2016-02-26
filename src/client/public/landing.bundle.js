@@ -44,132 +44,144 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDom = __webpack_require__(158);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Landing = _react2.default.createClass({
-	    displayName: 'Landing',
+	    displayName: "Landing",
 
 	    render: function render() {
 	        return _react2.default.createElement(
-	            'div',
-	            { className: 'container' },
+	            "div",
+	            { className: "container" },
 	            _react2.default.createElement(
-	                'header',
-	                { className: 'main-header' },
+	                "header",
+	                { className: "main-header" },
 	                _react2.default.createElement(
-	                    'a',
-	                    { className: 'site-logo', href: '#logo' },
-	                    _react2.default.createElement('img', { src: '', alt: '' })
+	                    "a",
+	                    { className: "site-logo", href: "#logo" },
+	                    _react2.default.createElement("img", { src: "", alt: "" })
 	                ),
 	                _react2.default.createElement(
-	                    'ul',
-	                    { className: 'nav' },
+	                    "ul",
+	                    { className: "nav" },
 	                    _react2.default.createElement(
-	                        'li',
+	                        "li",
 	                        null,
 	                        _react2.default.createElement(
-	                            'a',
-	                            { className: 'active', href: '#home' },
-	                            'Home'
+	                            "a",
+	                            { className: "active", href: "#home" },
+	                            "Home"
 	                        )
 	                    ),
 	                    _react2.default.createElement(
-	                        'li',
+	                        "li",
 	                        null,
 	                        _react2.default.createElement(
-	                            'a',
-	                            { href: '#contact' },
-	                            'Contact'
+	                            "a",
+	                            { href: "#contact" },
+	                            "Contact"
 	                        )
 	                    ),
 	                    _react2.default.createElement(
-	                        'li',
+	                        "li",
 	                        null,
 	                        _react2.default.createElement(
-	                            'a',
-	                            { href: '#about' },
-	                            'About'
+	                            "a",
+	                            { href: "#about" },
+	                            "About"
 	                        )
 	                    )
 	                ),
 	                _react2.default.createElement(
-	                    'ul',
-	                    { className: 'login' },
+	                    "ul",
+	                    { className: "login" },
 	                    _react2.default.createElement(
-	                        'li',
+	                        "li",
 	                        null,
 	                        _react2.default.createElement(
-	                            'a',
-	                            { href: '#', className: 'transBtn' },
-	                            'SIGN UP'
+	                            "a",
+	                            { href: "#", className: "transBtn" },
+	                            "SIGN UP"
 	                        )
 	                    ),
 	                    _react2.default.createElement(
-	                        'li',
+	                        "li",
 	                        null,
 	                        _react2.default.createElement(
-	                            'a',
-	                            { href: '../index.html', className: 'filledBtn' },
-	                            'LOG IN'
+	                            "a",
+	                            { href: "../index.html", className: "filledBtn" },
+	                            "LOG IN"
 	                        )
 	                    )
 	                )
 	            ),
 	            _react2.default.createElement(
-	                'main',
-	                { className: 'main' },
+	                "main",
+	                { className: "main" },
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'wrap-content' },
+	                    "div",
+	                    { className: "wrap-content" },
 	                    _react2.default.createElement(
-	                        'h1',
+	                        "h1",
 	                        null,
-	                        'Common interest finder'
+	                        "Common interest finder"
 	                    ),
 	                    _react2.default.createElement(
-	                        'p',
+	                        "p",
 	                        null,
-	                        'A way to find friends and like-minded people with emia, chatt or Meetups'
+	                        "A way to find friends and like-minded people with emia, chatt or Meetups"
 	                    ),
 	                    _react2.default.createElement(
-	                        'ul',
-	                        { className: 'info' },
+	                        "ul",
+	                        { className: "info" },
 	                        _react2.default.createElement(
-	                            'li',
+	                            "li",
 	                            null,
 	                            _react2.default.createElement(
-	                                'a',
-	                                { href: '#', className: 'transBtn' },
-	                                'Learn More'
+	                                "a",
+	                                { href: "#", className: "transBtn" },
+	                                "Learn More"
 	                            )
 	                        ),
 	                        _react2.default.createElement(
-	                            'li',
+	                            "li",
 	                            null,
 	                            _react2.default.createElement(
-	                                'a',
-	                                { href: '#', className: 'filledBtn' },
-	                                'Continue'
+	                                "a",
+	                                { href: "#", className: "filledBtn" },
+	                                "Continue"
 	                            )
 	                        )
 	                    )
 	                )
 	            ),
-	            _react2.default.createElement('footer', { className: 'footer' })
+	            _react2.default.createElement("footer", { className: "footer" })
 	        );
 	    }
 
 	});
 
-	(0, _reactDom.render)(_react2.default.createElement(Landing, null), document.getElementById('landing'));
+	exports.default = Landing;
+
+	/*
+	render(
+
+	    <Landing />,
+	    document.getElementById('landing')
+
+
+	);
+	    */
 
 /***/ },
 /* 1 */
@@ -19762,15 +19774,6 @@
 
 	module.exports = deprecated;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
-
-/***/ },
-/* 158 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(3);
-
 
 /***/ }
 /******/ ]);

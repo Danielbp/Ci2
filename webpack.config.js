@@ -6,9 +6,12 @@ var APP_DIR = path.resolve(__dirname, 'src/client/app');
 
 var config = {
     entry: {
-        index: APP_DIR + '/index.jsx',
-        todo: APP_DIR + '/todo.js',
+        index: APP_DIR + '/index.jsx'
+
+        /*
+        todo: APP_DIR + '/todo.js'
         landing: APP_DIR + '/landingpage.js'
+        */
 
     },
     output: {

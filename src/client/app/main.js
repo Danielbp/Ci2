@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link,  Router, Route, hashHistory } from 'react-router'
 
 var user = {
     name: ''
@@ -131,7 +132,6 @@ var Header = React.createClass({
             </header>
         );
     }
-
 });
 
 var Main = React.createClass({
@@ -303,5 +303,4 @@ var UserProfile = React.createClass({
 });
 
 export default Container;
-
 
