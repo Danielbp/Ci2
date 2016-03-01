@@ -1,30 +1,19 @@
 import React from 'react';
 import {render} from 'react-dom';
-import { Router, Route, hashHistory, IndexRoute  } from 'react-router'
-import Container from './main';
+import { Router, Route, hashHistory, IndexRoute} from 'react-router'
+import App from './app'
 import About from './about';
 import Contact from './contact';
+import Profile from './profile';
 import Landing from './landingpage';
-
-
-//FIX ROUTING MAKE A ROUTING.JS FILE
-
-class App extends React.Component {
-    render () {
-        return (
-        <Container />
-        );
-    }
-}
-
-//        <IndexRoute component={Landing} />
 
 render((
     <Router history={hashHistory}>
-        <Route path="/" component={App}/>
-        <Route path="/home" component={Landing}/>
-        <Route path="/about" component={About}/>
-        <Route path="/contact" component={Contact}/>
-        <Route path="/main" component={Container}/>
+        <Route path="/" component={App}>
+            <IndexRoute component={Landing}/>
+            <Route path="/about" component={About}/>
+            <Route path="/contact" component={Contact}/>
+            <Route path="/profile" component={Profile}/>
+        </Route>
     </Router>
 ), document.getElementById('app'));

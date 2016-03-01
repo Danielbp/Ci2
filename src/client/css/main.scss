@@ -356,6 +356,10 @@ p{
   margin-top: 1.5em;
   list-style: none;
 
+  .active {
+    color: #888;
+  }
+
   a {
     display: block;
     color: white;
@@ -367,7 +371,7 @@ p{
   }
 
   a:hover {
-    color: $color-primary-1 ;
+    color: $color-primary-1;
 
   }
 

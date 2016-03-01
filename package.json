@@ -2,7 +2,7 @@
   "name": "ci2",
   "version": "1.0.0",
   "description": "Ex",
-  "main": "index.js",
+  "main": "index.jsx",
   "scripts": {
     "dev": "webpack -d --watch",
     "build": "webpack -p --progress --colors"
