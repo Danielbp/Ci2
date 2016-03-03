@@ -24903,15 +24903,47 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	//FIND OUT HOW TO PASS VALUES FROM OTHER COMPONENTS
+
 	var user = {
 	    name: ''
 	};
 
-	//Entire NAV will be added through React use map to add the uls in right order
 	var LogIn = _react2.default.createClass({
 	    displayName: 'LogIn',
 
-	    logIn: function logIn() {},
+	    getInitialState: function getInitialState() {
+	        return {
+	            login: true,
+	            logout: false
+	        };
+	    },
+	    onLogin: function onLogin(event) {
+	        this.setState({
+	            login: !this.state.login,
+	            logout: !this.state.logout
+	        });
+	    },
+
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'ul',
+	            { className: 'login', onClick: this.onLogin },
+	            this.state.login ? _react2.default.createElement(Li, null) : null,
+	            this.state.logout ? _react2.default.createElement(Lo, null) : null
+	        );
+	    }
+
+	});
+
+	/*
+	<li><Link onClick={this.handleLogin} className="filledBtn" to="/profile">SIGN IN</Link></li>
+	<li><Link onClick={this.getInitialState} className="transBtn" to="/">LOG OUT</Link></li>
+	*/
+
+	var Li = _react2.default.createClass({
+	    displayName: 'Li',
+
 	    handleLogin: function handleLogin() {
 	        var isNewUser = true;
 	        var ref = new Firebase("https://commoni.firebaseio.com/");
@@ -24943,13 +24975,23 @@
 	                    return authData.google.displayName;
 	            }
 	        }
-	        var authData = ref.getAuth();
-	        if (authData) {
-	            console.log("User " + authData.uid + " is logged in with " + authData.provider);
-	        } else {
-	            console.log("User is logged out");
-	        }
 	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'li',
+	            null,
+	            _react2.default.createElement(
+	                _reactRouter.Link,
+	                { onClick: this.handleLogin, className: 'filledBtn', to: '/profile' },
+	                'SIGN IN'
+	            )
+	        );
+	    }
+	});
+
+	var Lo = _react2.default.createClass({
+	    displayName: 'Lo',
+
 	    handleLogout: function handleLogout() {
 	        var ref = new Firebase("https://commoni.firebaseio.com/");
 	        ref.unauth();
@@ -24957,29 +24999,15 @@
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
-	            'ul',
-	            { className: 'login' },
+	            'li',
+	            null,
 	            _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                    _reactRouter.Link,
-	                    { onClick: this.handleLogin, className: 'filledBtn', to: '/profile' },
-	                    'SIGN IN'
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                    _reactRouter.Link,
-	                    { onClick: this.getInitialState, className: 'transBtn', to: '/' },
-	                    'LOG OUT'
-	                )
+	                _reactRouter.Link,
+	                { onClick: this.handleLogout, className: 'transBtn', to: '/' },
+	                'LOG OUT'
 	            )
 	        );
 	    }
-
 	});
 
 	exports.default = LogIn;
@@ -25207,25 +25235,28 @@
 	    getInitialState: function getInitialState() {
 	        return {
 	            showUserProfile: true,
-	            showUserSkills: false
+	            showUserSkills: false,
+	            showUserComments: false
 
 	        };
 	    },
 	    onClickProfile: function onClickProfile() {
 	        this.setState({
 	            showUserProfile: true,
-	            showUserSkills: false
+	            showUserSkills: false,
+	            showUserComments: false
 	        });
 	    },
 	    onClickSkills: function onClickSkills() {
 	        this.setState({
 	            showUserSkills: true,
-	            showUserProfile: false
+	            showUserProfile: false,
+	            showUserComments: false
 	        });
 	    },
 	    onClickMessage: function onClickMessage() {
 	        this.setState({
-	            showUserMessage: true,
+	            showUserComments: true,
 	            showUserProfile: false,
 	            showUserSkills: false
 	        });
@@ -25279,7 +25310,7 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            "a",
-	                            null,
+	                            { onClick: this.onClickMessage },
 	                            _react2.default.createElement("i", { className: "fa fa-envelope-o" })
 	                        )
 	                    ),
@@ -25295,10 +25326,117 @@
 	                )
 	            ),
 	            this.state.showUserProfile ? _react2.default.createElement(UserProfile, null) : null,
-	            this.state.showUserSkills ? _react2.default.createElement(UserSkills, null) : null
+	            this.state.showUserSkills ? _react2.default.createElement(UserSkills2, null) : null,
+	            this.state.showUserComments ? _react2.default.createElement(CommentBox, null) : null
 	        );
 	    }
 
+	});
+
+	var firebaseUrl = "https://commoni.firebaseio.com/";
+
+	var CommentBox = _react2.default.createClass({
+	    displayName: "CommentBox",
+
+	    mixins: [ReactFireMixin],
+
+	    handleCommentSubmit: function handleCommentSubmit(comment) {
+	        // Here we push the update out to Firebase and let ReactFire update this.state.data
+	        this.firebaseRefs["data"].push(comment);
+	    },
+
+	    getInitialState: function getInitialState() {
+	        return {
+	            data: []
+	        };
+	    },
+
+	    componentWillMount: function componentWillMount() {
+	        // Here we bind the component to Firebase and it handles all data updates,
+	        // no need to poll as in the React example.
+	        this.bindAsArray(new Firebase(firebaseUrl + "commentBox"), "data");
+	    },
+
+	    render: function render() {
+	        return _react2.default.createElement(
+	            "div",
+	            { className: "messageBox" },
+	            _react2.default.createElement(
+	                "p",
+	                null,
+	                _react2.default.createElement(
+	                    "strong",
+	                    null,
+	                    "Comments"
+	                )
+	            ),
+	            _react2.default.createElement(CommentList, { data: this.state.data }),
+	            _react2.default.createElement(CommentForm, { onCommentSubmit: this.handleCommentSubmit })
+	        );
+	    }
+
+	});
+
+	var converter = new Showdown.converter();
+
+	var Comment = _react2.default.createClass({
+	    displayName: "Comment",
+
+	    render: function render() {
+	        var rawMarkup = converter.makeHtml(this.props.children.toString());
+	        return _react2.default.createElement(
+	            "div",
+	            { className: "message" },
+	            _react2.default.createElement(
+	                "p",
+	                { className: "messageAuthor" },
+	                this.props.author
+	            ),
+	            _react2.default.createElement("span", { dangerouslySetInnerHTML: { __html: rawMarkup } })
+	        );
+	    }
+	});
+
+	var CommentList = _react2.default.createClass({
+	    displayName: "CommentList",
+
+	    render: function render() {
+	        var commentNodes = this.props.data.map(function (comment, index) {
+	            return _react2.default.createElement(
+	                Comment,
+	                { key: index, author: comment.author },
+	                comment.text
+	            );
+	        });
+	        return _react2.default.createElement(
+	            "div",
+	            { className: "messageList" },
+	            commentNodes
+	        );
+	    }
+	});
+
+	var CommentForm = _react2.default.createClass({
+	    displayName: "CommentForm",
+
+	    handleSubmit: function handleSubmit() {
+	        var author = this.refs.author.getDOMNode().value.trim();
+	        var text = this.refs.text.getDOMNode().value.trim();
+	        this.props.onCommentSubmit({ author: author, text: text });
+	        this.refs.author.getDOMNode().value = '';
+	        this.refs.text.getDOMNode().value = '';
+	        return false;
+	    },
+
+	    render: function render() {
+	        return _react2.default.createElement(
+	            "form",
+	            { className: "messageForm", onSubmit: this.handleSubmit },
+	            _react2.default.createElement("input", { type: "text", placeholder: "Your name", ref: "author" }),
+	            _react2.default.createElement("input", { type: "text", placeholder: "Say something...", ref: "text" }),
+	            _react2.default.createElement("input", { type: "submit", value: "Post" })
+	        );
+	    }
 	});
 
 	var UserSkills = _react2.default.createClass({
@@ -25440,11 +25578,26 @@
 	var UserProfile = _react2.default.createClass({
 	    displayName: "UserProfile",
 
+	    mixins: [ReactFireMixin],
 	    getInitialState: function getInitialState() {
-	        return { value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies porttitor elementum. Morbi eu risus justo. Etiam molestie, urna vitae euismod hendrerit, velit nibh porttitor nulla, sit amet tristique magna neque sit amet leo.' };
+	        return { about: '' };
 	    },
-	    handleChange: function handleChange(event) {
-	        this.setState({ value: event.target.value });
+	    componentWillMount: function componentWillMount() {
+	        var ref = new Firebase("https://commoni.firebaseio.com/");
+	        var authData = ref.getAuth();
+	        var firebaseRef = new Firebase(ref + "users/");
+	        this.bindAsArray(firebaseRef.limitToLast(25), 'users');
+	    },
+	    onChange: function onChange(e) {
+	        this.setState({ about: e.target.value });
+	    },
+	    handleChange: function handleChange(e) {
+	        e.preventDefault();
+	        if (this.state.about && this.state.about.trim().length !== 0) {
+	            this.firebaseRefs['users'].set({
+	                about: this.state.about
+	            });
+	        }
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
@@ -25461,15 +25614,195 @@
 	            ),
 	            _react2.default.createElement("textarea", {
 	                type: "text",
-	                value: this.state.value,
-	                onChange: this.handleChange
-	            })
+	                value: this.state.about,
+	                onChange: this.onChange
+	            }),
+	            _react2.default.createElement(
+	                "span",
+	                { onClick: this.handleChange },
+	                _react2.default.createElement("i", { className: "fa fa-cloud" })
+	            )
 	        );
 	    }
 
 	});
 
+	var SkillsList = _react2.default.createClass({
+	    displayName: "SkillsList",
+
+	    render: function render() {
+	        var _this = this;
+	        var createItem = function createItem(item, index) {
+	            return _react2.default.createElement(
+	                "li",
+	                { key: index },
+	                item.text,
+	                _react2.default.createElement(
+	                    "span",
+	                    { onClick: _this.props.removeItem.bind(null, item['.key']),
+	                        style: { color: 'red', marginLeft: '10px', cursor: 'pointer' } },
+	                    _react2.default.createElement("i", { className: "fa fa-times" })
+	                )
+	            );
+	        };
+	        return _react2.default.createElement(
+	            "ul",
+	            null,
+	            this.props.items.map(createItem)
+	        );
+	    }
+	});
+
+	//Removed for now not working as intended
+	//this.firebaseRef = new Firebase(ref + "users/" + authData.uid +"/items/");
+
+	var UserSkills2 = _react2.default.createClass({
+	    displayName: "UserSkills2",
+
+	    mixins: [ReactFireMixin],
+	    componentWillMount: function componentWillMount() {
+	        var ref = new Firebase("https://commoni.firebaseio.com/");
+	        var authData = ref.getAuth();
+	        this.firebaseRef = new Firebase(ref + "items/");
+	        this.firebaseRef.limitToLast(25).on('value', function (dataSnapshot) {
+	            var items = [];
+	            dataSnapshot.forEach(function (childSnapshot) {
+	                var item = childSnapshot.val();
+	                item['.key'] = childSnapshot.key();
+	                items.push(item);
+	            }.bind(this));
+
+	            this.setState({
+	                items: items
+	            });
+	        }.bind(this));
+	    },
+	    componentWillUnmount: function componentWillUnmount() {
+	        this.firebaseRef.off();
+	    },
+	    getInitialState: function getInitialState() {
+	        return {
+	            items: [],
+	            text: ''
+	        };
+	    },
+	    onChange: function onChange(e) {
+	        this.setState({ text: e.target.value });
+	    },
+
+	    removeItem: function removeItem(key) {
+	        var ref = new Firebase("https://commoni.firebaseio.com/");
+	        var authData = ref.getAuth();
+	        var firebaseRef = new Firebase(ref + "items/");
+	        firebaseRef.child(key).remove();
+	    },
+
+	    handleSubmit: function handleSubmit(e) {
+	        e.preventDefault();
+	        if (this.state.text && this.state.text.trim().length !== 0) {
+	            this.firebaseRef.push({
+	                text: this.state.text
+	            });
+	            this.setState({
+	                text: ''
+	            });
+	        }
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            "div",
+	            { className: "profile-info" },
+	            _react2.default.createElement(
+	                "p",
+	                null,
+	                _react2.default.createElement(
+	                    "strong",
+	                    null,
+	                    "My Skills"
+	                )
+	            ),
+	            _react2.default.createElement(SkillsList, { items: this.state.items, removeItem: this.removeItem }),
+	            _react2.default.createElement(
+	                "form",
+	                { onSubmit: this.handleSubmit },
+	                _react2.default.createElement("input", { onChange: this.onChange, value: this.state.text }),
+	                _react2.default.createElement(
+	                    "button",
+	                    null,
+	                    _react2.default.createElement("i", { className: "fa fa-plus" })
+	                )
+	            )
+	        );
+	    }
+	});
+
 	exports.default = Profile;
+
+	/*
+	 var UserProfile = React.createClass({
+	 mixins: [ReactFireMixin],
+	 getInitialState: function(){
+	 return {about: ''};
+	 },
+	 componentWillMount: function() {
+	 var ref = new Firebase("https://commoni.firebaseio.com/");
+	 var authData = ref.getAuth();
+	 var firebaseRef = new Firebase( ref + "users/" + authData.uid + "/");
+	 this.bindAsArray(firebaseRef.limitToLast(25), 'users');
+	 },
+	 onChange: function(e) {
+	 this.setState({about: e.target.value});
+	 },
+	 handleChange: function(e){
+	 e.preventDefault();
+	 if (this.state.about && this.state.about.trim().length !== 0) {
+	 this.firebaseRefs['users'].update({
+	 about: this.state.about
+	 });
+	 }
+	 },
+	 render: function(){
+	 return (
+	 <div className="profile-info">
+	 <p><strong>About Me</strong></p>
+	 <p>{ this.state.about }</p>
+	 <textarea
+	 type="text"
+	 value={ this.state.about }
+	 onChange={ this.onChange }
+	 />
+	 <span onClick={ this.handleChange }><i className="fa fa-cloud"></i></span>
+	 </div>
+	 );
+	 }
+
+	 });
+	 */
+
+	/*Original
+	 var UserProfile = React.createClass({
+	 mixins: [ReactFireMixin],
+	 getInitialState: function(){
+	 return {about: ''};
+	 },
+	 onChange: function(e) {
+	 this.setState({about: e.target.value});
+	 },
+	 render: function(){
+	 return (
+	 <div className="profile-info">
+	 <p><strong>About Me</strong></p>
+	 <textarea
+	 type="text"
+	 value={ this.state.about }
+	 onChange={ this.onChange }
+	 />
+	 </div>
+	 );
+	 }
+
+	 });
+	 */
 
 /***/ }
 /******/ ]);

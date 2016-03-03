@@ -33,6 +33,9 @@ h5 {
 p {
   margin: 0; }
 
+ul {
+  list-style-type: none; }
+
 /* Container */
 .main-header, .main, .nav, .login {
   display: flex;
@@ -108,7 +111,8 @@ p {
         padding: 2em;
         padding-top: 0;
         color: black;
-        height: 320px; }
+        height: 320px;
+        text-align: left; }
         .main .wrap-profiles .profile-container .profile-info i {
           cursor: pointer; }
         .main .wrap-profiles .profile-container .profile-info span {
@@ -175,6 +179,14 @@ p {
           width: 90%; }
         .main .wrap-profiles .profile-container .profile-info .value-100 {
           width: 100%; }
+      .main .wrap-profiles .profile-container .messageBox {
+        display: flex;
+        flex-direction: column;
+        padding: 2em;
+        padding-top: 0;
+        color: black;
+        height: 320px;
+        text-align: left; }
   .main .wrap-content {
     margin: auto 0;
     text-align: center; }

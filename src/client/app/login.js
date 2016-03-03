@@ -1,15 +1,43 @@
 import React from 'react';
 import { Link } from 'react-router';
 
+//FIND OUT HOW TO PASS VALUES FROM OTHER COMPONENTS
+
 var user = {
     name: ''
 };
 
-//Entire NAV will be added through React use map to add the uls in right order
 var LogIn = React.createClass ({
-    logIn: function (){
-
+    getInitialState: function() {
+        return {
+            login: true,
+            logout: false
+        };
     },
+    onLogin: function(event) {
+        this.setState({
+            login: !this.state.login,
+            logout: !this.state.logout
+        });
+    },
+
+    render : function(){
+        return (
+            <ul className="login" onClick={this.onLogin}>
+                { this.state.login ? <Li/> : null }
+                { this.state.logout ? <Lo/> : null }
+            </ul>
+        );
+    }
+
+});
+
+/*
+<li><Link onClick={this.handleLogin} className="filledBtn" to="/profile">SIGN IN</Link></li>
+<li><Link onClick={this.getInitialState} className="transBtn" to="/">LOG OUT</Link></li>
+*/
+
+var Li = React.createClass({
     handleLogin: function (){
         var isNewUser = true;
         var ref = new Firebase("https://commoni.firebaseio.com/");
@@ -41,28 +69,28 @@ var LogIn = React.createClass ({
                     return authData.google.displayName;
             }
         }
-        var authData = ref.getAuth();
-        if (authData) {
-            console.log("User " + authData.uid + " is logged in with " + authData.provider);
-        } else {
-            console.log("User is logged out");
-        }
     },
+    render: function() {
+        return (
+
+                <li><Link onClick={this.handleLogin} className="filledBtn" to="/profile">SIGN IN</Link></li>
+
+        );
+    }
+});
+
+var Lo = React.createClass({
     handleLogout: function (){
         var ref = new Firebase("https://commoni.firebaseio.com/");
         ref.unauth();
         console.log("Logged Out");
 
     },
-    render : function(){
+    render: function() {
         return (
-            <ul className="login">
-                <li><Link onClick={this.handleLogin} className="filledBtn" to="/profile">SIGN IN</Link></li>
-                <li><Link onClick={this.getInitialState} className="transBtn" to="/">LOG OUT</Link></li>
-            </ul>
+            <li><Link onClick={this.handleLogout} className="transBtn" to="/">LOG OUT</Link></li>
         );
     }
-
 });
 
 export default LogIn;

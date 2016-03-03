@@ -76,6 +76,10 @@ h5{
 p{
   margin: 0;
 }
+
+ul{
+  list-style-type: none;
+}
 /* Container */
 
 .main-header, .main, .nav, .login{
@@ -181,6 +185,7 @@ p{
         padding-top: 0;
         color: black;
         height: 320px;
+        text-align: left;
 
         i{
           cursor: pointer;
@@ -284,6 +289,16 @@ p{
 
 
       }
+
+      .messageBox{
+        display: flex;
+        flex-direction: column;
+        padding: 2em;
+        padding-top: 0;
+        color: black;
+        height: 320px;
+        text-align: left;
+      }
     }
   }
 
@@ -357,7 +372,7 @@ p{
   list-style: none;
 
   .active {
-    color: #888;
+
   }
 
   a {

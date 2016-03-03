@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+
 
 var Profile = React.createClass({
     render: function(){
@@ -30,25 +31,28 @@ var ProfileContainer = React.createClass({
     getInitialState: function() {
         return {
             showUserProfile: true,
-            showUserSkills: false
+            showUserSkills: false,
+            showUserComments: false
 
         };
     },
     onClickProfile: function() {
         this.setState({
             showUserProfile: true,
-            showUserSkills: false
+            showUserSkills: false,
+            showUserComments: false
         });
     },
     onClickSkills: function() {
         this.setState({
             showUserSkills: true,
-            showUserProfile: false
+            showUserProfile: false,
+            showUserComments: false
         });
     },
     onClickMessage: function() {
         this.setState({
-            showUserMessage: true,
+            showUserComments: true,
             showUserProfile: false,
             showUserSkills: false
         });
@@ -70,16 +74,98 @@ var ProfileContainer = React.createClass({
                     <ul className="user-nav">
                         <li><a onClick={this.onClickProfile}><i className="fa fa-user"></i></a></li>
                         <li><a onClick={this.onClickSkills}><i className="fa fa-diamond"></i></a></li>
-                        <li><a><i className="fa fa-envelope-o"></i></a></li>
+                        <li><a onClick={this.onClickMessage}><i className="fa fa-envelope-o"></i></a></li>
                         <li><a><i className="fa fa-comment"></i></a></li>
                     </ul>
                 </div>
                 { this.state.showUserProfile ? <UserProfile /> : null }
-                { this.state.showUserSkills ? <UserSkills /> : null }
+                { this.state.showUserSkills ? <UserSkills2 /> : null }
+                { this.state.showUserComments ? <CommentBox /> : null }
             </div>
         );
     }
 
+});
+
+var firebaseUrl = "https://commoni.firebaseio.com/";
+
+var CommentBox = React.createClass({
+    mixins: [ReactFireMixin],
+
+    handleCommentSubmit: function(comment) {
+        // Here we push the update out to Firebase and let ReactFire update this.state.data
+        this.firebaseRefs["data"].push(comment);
+    },
+
+    getInitialState: function() {
+        return {
+            data: []
+        };
+    },
+
+    componentWillMount: function() {
+        // Here we bind the component to Firebase and it handles all data updates,
+        // no need to poll as in the React example.
+        this.bindAsArray(new Firebase(firebaseUrl + "commentBox"), "data");
+    },
+
+    render: function() {
+        return (
+            <div className="messageBox">
+                <p><strong>Comments</strong></p>
+                <CommentList data={this.state.data} />
+                <CommentForm onCommentSubmit={this.handleCommentSubmit} />
+            </div>
+        );
+    }
+
+});
+
+var converter = new Showdown.converter();
+
+
+var Comment = React.createClass({
+    render: function() {
+        var rawMarkup = converter.makeHtml(this.props.children.toString());
+        return (
+            <div className="message">
+                <p className="messageAuthor">{this.props.author}</p>
+                <span dangerouslySetInnerHTML={{__html: rawMarkup}} />
+            </div>
+        );
+    }
+});
+
+
+var CommentList = React.createClass({
+    render: function() {
+        var commentNodes = this.props.data.map(function (comment, index) {
+            return <Comment key={index} author={comment.author}>{comment.text}</Comment>;
+        });
+        return <div className="messageList">{commentNodes}</div>;
+    }
+});
+
+
+var CommentForm = React.createClass({
+    handleSubmit: function() {
+        var author = this.refs.author.getDOMNode().value.trim();
+        var text = this.refs.text.getDOMNode().value.trim();
+        this.props.onCommentSubmit({author: author, text: text});
+        this.refs.author.getDOMNode().value = '';
+        this.refs.text.getDOMNode().value = '';
+        return false;
+    },
+
+    render: function() {
+        return (
+            <form className="messageForm" onSubmit={this.handleSubmit}>
+                <input type="text" placeholder="Your name" ref="author" />
+                <input type="text" placeholder="Say something..." ref="text" />
+                <input type="submit" value="Post" />
+            </form>
+        );
+    }
 });
 
 var UserSkills = React.createClass({
@@ -161,25 +247,195 @@ var UserSkills = React.createClass({
 });
 
 var UserProfile = React.createClass({
+    mixins: [ReactFireMixin],
     getInitialState: function(){
-        return {value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies porttitor elementum. Morbi eu risus justo. Etiam molestie, urna vitae euismod hendrerit, velit nibh porttitor nulla, sit amet tristique magna neque sit amet leo.'};
+        return {about: ''};
     },
-    handleChange: function(event){
-        this.setState({value: event.target.value})
+    componentWillMount: function() {
+        var ref = new Firebase("https://commoni.firebaseio.com/");
+        var authData = ref.getAuth();
+        var firebaseRef = new Firebase( ref + "users/");
+        this.bindAsArray(firebaseRef.limitToLast(25), 'users');
+    },
+    onChange: function(e) {
+        this.setState({about: e.target.value});
+    },
+    handleChange: function(e){
+        e.preventDefault();
+        if (this.state.about && this.state.about.trim().length !== 0) {
+            this.firebaseRefs['users'].set({
+                about: this.state.about
+            });
+        }
     },
     render: function(){
         return (
             <div className="profile-info">
                 <p><strong>About Me</strong></p>
-                <textarea
-                    type="text"
-                    value={this.state.value}
-                    onChange={this.handleChange}
-                />
+             <textarea
+                 type="text"
+                 value={ this.state.about }
+                 onChange={ this.onChange }
+             />
+                <span onClick={ this.handleChange }><i className="fa fa-cloud"></i></span>
             </div>
         );
     }
 
 });
 
+
+
+var SkillsList = React.createClass({
+    render: function() {
+        var _this = this;
+        var createItem = function(item, index) {
+            return (
+                <li key={ index }>
+                    { item.text }
+          <span onClick={ _this.props.removeItem.bind(null, item['.key']) }
+                style={{ color: 'red', marginLeft: '10px', cursor: 'pointer' }}>
+            <i className="fa fa-times"></i>
+          </span>
+                </li>
+            );
+        };
+        return <ul>{ this.props.items.map(createItem) }</ul>;
+    }
+});
+
+//Removed for now not working as intended
+//this.firebaseRef = new Firebase(ref + "users/" + authData.uid +"/items/");
+
+var UserSkills2 = React.createClass({
+    mixins: [ReactFireMixin],
+    componentWillMount: function() {
+        var ref = new Firebase("https://commoni.firebaseio.com/");
+        var authData = ref.getAuth();
+        this.firebaseRef = new Firebase(ref + "items/");
+        this.firebaseRef.limitToLast(25).on('value', function(dataSnapshot) {
+            var items = [];
+            dataSnapshot.forEach(function(childSnapshot) {
+                var item = childSnapshot.val();
+                item['.key'] = childSnapshot.key();
+                items.push(item);
+            }.bind(this));
+
+            this.setState({
+                items: items
+            });
+        }.bind(this));
+    },
+    componentWillUnmount: function() {
+        this.firebaseRef.off();
+    },
+    getInitialState: function() {
+        return {
+            items: [],
+            text: ''
+        };
+    },
+    onChange: function(e) {
+        this.setState({text: e.target.value});
+    },
+
+    removeItem: function(key) {
+        var ref = new Firebase("https://commoni.firebaseio.com/");
+        var authData = ref.getAuth();
+        var firebaseRef = new Firebase(ref + "items/");
+        firebaseRef.child(key).remove();
+    },
+
+    handleSubmit: function(e) {
+        e.preventDefault();
+        if (this.state.text && this.state.text.trim().length !== 0) {
+            this.firebaseRef.push({
+                text: this.state.text
+            });
+            this.setState({
+                text: ''
+            });
+        }
+    },
+    render: function() {
+        return (
+            <div className="profile-info">
+                <p><strong>My Skills</strong></p>
+                <SkillsList items={ this.state.items } removeItem={ this.removeItem } />
+                <form onSubmit={ this.handleSubmit }>
+                    <input onChange={ this.onChange } value={ this.state.text } />
+                    <button><i className="fa fa-plus"></i></button>
+                </form>
+            </div>
+        );
+    }
+});
+
 export default Profile;
+
+
+/*
+ var UserProfile = React.createClass({
+ mixins: [ReactFireMixin],
+ getInitialState: function(){
+ return {about: ''};
+ },
+ componentWillMount: function() {
+ var ref = new Firebase("https://commoni.firebaseio.com/");
+ var authData = ref.getAuth();
+ var firebaseRef = new Firebase( ref + "users/" + authData.uid + "/");
+ this.bindAsArray(firebaseRef.limitToLast(25), 'users');
+ },
+ onChange: function(e) {
+ this.setState({about: e.target.value});
+ },
+ handleChange: function(e){
+ e.preventDefault();
+ if (this.state.about && this.state.about.trim().length !== 0) {
+ this.firebaseRefs['users'].update({
+ about: this.state.about
+ });
+ }
+ },
+ render: function(){
+ return (
+ <div className="profile-info">
+ <p><strong>About Me</strong></p>
+ <p>{ this.state.about }</p>
+ <textarea
+ type="text"
+ value={ this.state.about }
+ onChange={ this.onChange }
+ />
+ <span onClick={ this.handleChange }><i className="fa fa-cloud"></i></span>
+ </div>
+ );
+ }
+
+ });
+ */
+
+/*Original
+ var UserProfile = React.createClass({
+ mixins: [ReactFireMixin],
+ getInitialState: function(){
+ return {about: ''};
+ },
+ onChange: function(e) {
+ this.setState({about: e.target.value});
+ },
+ render: function(){
+ return (
+ <div className="profile-info">
+ <p><strong>About Me</strong></p>
+ <textarea
+ type="text"
+ value={ this.state.about }
+ onChange={ this.onChange }
+ />
+ </div>
+ );
+ }
+
+ });
+ */
