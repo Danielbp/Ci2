@@ -1,4 +1,7 @@
 import React from 'react';
+import Rebase from 're-base';
+var base = Rebase.createClass('https://commoni.firebaseio.com/');
+var authData = base.getAuth();
 
 
 var Profile = React.createClass({
@@ -112,7 +115,7 @@ var CommentBox = React.createClass({
     render: function() {
         return (
             <div className="messageBox">
-                <p><strong>Comments</strong></p>
+                <p><strong>Message</strong></p>
                 <CommentList data={this.state.data} />
                 <CommentForm onCommentSubmit={this.handleCommentSubmit} />
             </div>
@@ -247,37 +250,37 @@ var UserSkills = React.createClass({
 });
 
 var UserProfile = React.createClass({
-    mixins: [ReactFireMixin],
     getInitialState: function(){
         return {about: ''};
     },
     componentWillMount: function() {
-        var ref = new Firebase("https://commoni.firebaseio.com/");
-        var authData = ref.getAuth();
-        var firebaseRef = new Firebase( ref + "users/");
-        this.bindAsArray(firebaseRef.limitToLast(25), 'users');
+        // Two way data binding
+        this.ref = base.syncState('users/' + authData.uid + '/about/', {
+            context: this,
+            state: 'about'
+        });
+    },
+    componentWillUnmount(){
+        base.removeBinding(this.ref);
+    },
+    addItem(newItem){
+        this.setState({
+            about: this.state.about.concat([newItem]) //updates Firebase and the local state
+        });
     },
     onChange: function(e) {
         this.setState({about: e.target.value});
-    },
-    handleChange: function(e){
-        e.preventDefault();
-        if (this.state.about && this.state.about.trim().length !== 0) {
-            this.firebaseRefs['users'].set({
-                about: this.state.about
-            });
-        }
     },
     render: function(){
         return (
             <div className="profile-info">
                 <p><strong>About Me</strong></p>
+
              <textarea
                  type="text"
                  value={ this.state.about }
                  onChange={ this.onChange }
              />
-                <span onClick={ this.handleChange }><i className="fa fa-cloud"></i></span>
             </div>
         );
     }
@@ -338,7 +341,6 @@ var UserSkills2 = React.createClass({
     onChange: function(e) {
         this.setState({text: e.target.value});
     },
-
     removeItem: function(key) {
         var ref = new Firebase("https://commoni.firebaseio.com/");
         var authData = ref.getAuth();
@@ -363,7 +365,7 @@ var UserSkills2 = React.createClass({
                 <p><strong>My Skills</strong></p>
                 <SkillsList items={ this.state.items } removeItem={ this.removeItem } />
                 <form onSubmit={ this.handleSubmit }>
-                    <input onChange={ this.onChange } value={ this.state.text } />
+                    <input placeholder="Add Skill" onChange={ this.onChange } value={ this.state.text } />
                     <button><i className="fa fa-plus"></i></button>
                 </form>
             </div>
