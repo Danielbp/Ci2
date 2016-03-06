@@ -83,6 +83,11 @@ ul {
           height: 50px; }
         .main .wrap-profiles .profile-container .profile-auth .user-name-box {
           height: 50px; }
+          .main .wrap-profiles .profile-container .profile-auth .user-name-box input {
+            background-color: black;
+            color: white;
+            border: none;
+            text-align: center; }
         .main .wrap-profiles .profile-container .profile-auth .user-social-media {
           height: 50px; }
       .main .wrap-profiles .profile-container .profile-nav {

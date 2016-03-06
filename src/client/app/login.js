@@ -1,14 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, Router, browserHistory,hashHistory } from 'react-router';
 import Rebase from 're-base';
 var base = Rebase.createClass('https://commoni.firebaseio.com/');
-var authData = base.getAuth();
 
 //FIND OUT HOW TO PASS VALUES FROM OTHER COMPONENTS
-
-var user = {
-    name: ''
-};
 
 var LogIn = React.createClass ({
     getInitialState: function() {
@@ -17,7 +12,7 @@ var LogIn = React.createClass ({
             logout: false
         };
     },
-    onLogin: function(event) {
+    onLogin: function() {
         this.setState({
             login: !this.state.login,
             logout: !this.state.logout
@@ -35,48 +30,55 @@ var LogIn = React.createClass ({
 });
 
 /*
-<li><Link onClick={this.handleLogin} className="filledBtn" to="/profile">SIGN IN</Link></li>
-<li><Link onClick={this.getInitialState} className="transBtn" to="/">LOG OUT</Link></li>
-*/
-
-function authDataCallback(authData) {
-    if (authData) {
-        console.log("User " + authData.uid + " is logged in with " + authData.provider);
-    } else {
-        console.log("User is logged out");
-    }
-}
-
-var ref = new Firebase("https://commoni.firebaseio.com/");
-ref.onAuth(authDataCallback);
-
-
+ <li><Link onClick={this.handleLogin} className="filledBtn" to="/profile">SIGN IN</Link></li>
+ <li><Link onClick={this.getInitialState} className="transBtn" to="/">LOG OUT</Link></li>
+ */
 var Li = React.createClass({
-    getInitialState: function() {
+    getInitialState: function(){
         return {
-            about: ''
-        };
+
+        }
     },
-    handleLogin: function (){
-        base.authWithOAuthPopup("google", authData);
-        base.post('users/' + authData.uid + '/', {
-            data: {name: authData.google.displayName, provider: authData.provider, about: authData.about}
+    handleLogin: function (e){
+        var uid = null;
+        e.preventDefault();
+        base.authWithOAuthPopup('google', function(err, user) {
+            if (err) {
+                console.log(err, 'error');
+            } else if (user) {
+                // logged in!
+                uid = user.uid;
+                console.log('logged in with id', uid);
+                base.post('users/' + uid, {
+                    data: {
+                        name: user.google.displayName,
+                        provider: user.provider,
+                        uid: uid,
+                        about: 'About you',
+                        profession: 'Your profession',
+                        username: 'Your Name'
+                    }
+                });
+                hashHistory.push('/profile')
+            } else {
+                // logged out
+            }
         });
     },
-
     render: function() {
         return (
 
-                <li><Link onClick={this.handleLogin} className="filledBtn" to="/profile">SIGN IN</Link></li>
+            <li><Link onClick={this.handleLogin} className="filledBtn" to="/profile" >SIGN IN</Link></li>
 
         );
     }
 });
 
 var Lo = React.createClass({
-    handleLogout: function (){
-        base.unauth()
-
+    handleLogout: function (e){
+        e.preventDefault();
+        base.unauth();
+        hashHistory.push('/')
     },
     render: function() {
         return (
@@ -84,5 +86,6 @@ var Lo = React.createClass({
         );
     }
 });
+
 
 export default LogIn;

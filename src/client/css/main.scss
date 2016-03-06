@@ -142,6 +142,13 @@ ul{
 
         .user-name-box {
           height: 50px;
+
+          input {
+            background-color: black;
+            color: white;
+            border: none;
+            text-align: center;
+          }
         }
         .user-social-media {
           height: 50px;

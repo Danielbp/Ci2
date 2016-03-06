@@ -1,6 +1,6 @@
 import React from 'react';
 import {render} from 'react-dom';
-import { Router, Route, hashHistory, IndexRoute} from 'react-router'
+import { Router, Route, hashHistory, browserHistory, IndexRoute} from 'react-router'
 import App from './app'
 import About from './about';
 import Contact from './contact';

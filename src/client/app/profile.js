@@ -30,6 +30,72 @@ var Main = React.createClass({
     }
 });
 
+var Username = React.createClass({
+    getInitialState: function() {
+        return {
+            username: []
+        };
+    },
+    componentWillMount: function() {
+        // Two way data binding
+
+        if(authData){
+            this.ref = base.syncState('users/' + authData.uid + '/username/', {
+                context: this,
+                state: 'username'
+            });
+        }
+    },
+    componentWillUnmount(){
+        base.removeBinding(this.ref);
+    },
+    onChange: function(b) {
+        this.setState({username: b.target.value});
+    },
+    render: function(){
+        return (
+            <h4><input
+                type="text"
+                value={ this.state.username }
+                onChange={ this.onChange }
+            /></h4>
+        );
+    }
+});
+
+var Profession = React.createClass({
+    getInitialState: function() {
+        return {
+            profession: []
+        };
+    },
+    componentWillMount: function() {
+
+        // Two way data binding
+        if(authData) {
+            this.ref2 = base.syncState('users/' + authData.uid + '/profession/', {
+                context: this,
+                state: 'profession'
+            });
+        }
+    },
+    componentWillUnmount(){
+        base.removeBinding(this.ref2)
+    },
+    onChange2: function(d) {
+        this.setState({profession: d.target.value});
+    },
+    render: function(){
+        return (
+            <h5><input
+                type="text"
+                value={ this.state.profession }
+                onChange={ this.onChange2 }
+            /></h5>
+        );
+    }
+});
+
 var ProfileContainer = React.createClass({
     getInitialState: function() {
         return {
@@ -67,8 +133,8 @@ var ProfileContainer = React.createClass({
                 <div className="profile-auth">
                     <div className="user-avatar"></div>
                     <div className="user-name-box">
-                        <h4></h4>
-                        <h5>Front-End Developer</h5>
+                        <Username />
+                        <Profession />
                     </div>
                     <div className="user-social-media"></div>
 
@@ -251,22 +317,21 @@ var UserSkills = React.createClass({
 
 var UserProfile = React.createClass({
     getInitialState: function(){
-        return {about: ''};
+        return {
+            about: []
+        };
     },
     componentWillMount: function() {
         // Two way data binding
-        this.ref = base.syncState('users/' + authData.uid + '/about/', {
-            context: this,
-            state: 'about'
-        });
+        if(authData) {
+            this.ref = base.syncState('users/' + authData.uid + '/about/', {
+                context: this,
+                state: 'about'
+            });
+        }
     },
     componentWillUnmount(){
         base.removeBinding(this.ref);
-    },
-    addItem(newItem){
-        this.setState({
-            about: this.state.about.concat([newItem]) //updates Firebase and the local state
-        });
     },
     onChange: function(e) {
         this.setState({about: e.target.value});
@@ -315,7 +380,7 @@ var UserSkills2 = React.createClass({
     componentWillMount: function() {
         var ref = new Firebase("https://commoni.firebaseio.com/");
         var authData = ref.getAuth();
-        this.firebaseRef = new Firebase(ref + "items/");
+        this.firebaseRef = new Firebase(ref + 'users/' + authData.uid + '/items/');
         this.firebaseRef.limitToLast(25).on('value', function(dataSnapshot) {
             var items = [];
             dataSnapshot.forEach(function(childSnapshot) {
@@ -344,7 +409,7 @@ var UserSkills2 = React.createClass({
     removeItem: function(key) {
         var ref = new Firebase("https://commoni.firebaseio.com/");
         var authData = ref.getAuth();
-        var firebaseRef = new Firebase(ref + "items/");
+        var firebaseRef = new Firebase(ref + 'users/' + authData.uid + '/items/');
         firebaseRef.child(key).remove();
     },
 
