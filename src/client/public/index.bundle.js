@@ -24908,6 +24908,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var base = _reBase2.default.createClass('https://commoni.firebaseio.com/');
+	var authData = base.getAuth();
 
 	//FIND OUT HOW TO PASS VALUES FROM OTHER COMPONENTS
 
@@ -24941,6 +24942,7 @@
 	 <li><Link onClick={this.handleLogin} className="filledBtn" to="/profile">SIGN IN</Link></li>
 	 <li><Link onClick={this.getInitialState} className="transBtn" to="/">LOG OUT</Link></li>
 	 */
+
 	var Li = _react2.default.createClass({
 	    displayName: 'Li',
 
@@ -24948,28 +24950,69 @@
 	        return {};
 	    },
 	    handleLogin: function handleLogin(e) {
-	        var uid = null;
 	        e.preventDefault();
+
+	        var uid = null;
+	        var test = null;
 	        base.authWithOAuthPopup('google', function (err, user) {
-	            if (err) {
-	                console.log(err, 'error');
-	            } else if (user) {
-	                // logged in!
-	                uid = user.uid;
-	                console.log('logged in with id', uid);
-	                base.post('users/' + uid, {
-	                    data: {
-	                        name: user.google.displayName,
-	                        provider: user.provider,
-	                        uid: uid,
-	                        about: 'About you',
-	                        profession: 'Your profession',
-	                        username: 'Your Name'
+
+	            go();
+
+	            function go() {
+	                var userId = user.uid;
+	                var userData = {
+	                    name: user.google.displayName,
+	                    provider: user.provider,
+	                    uid: uid,
+	                    username: 'name',
+	                    profession: 'profession',
+	                    about: 'about you'
+	                };
+	                tryCreateUser(userId, userData);
+	            }
+
+	            var USERS_LOCATION = 'https://commoni.firebaseio.com/';
+
+	            function userCreated(userId, success) {
+	                if (!success) {
+	                    console.log('user ' + userId + ' already exists!');
+	                    _reactRouter.hashHistory.push('/profile');
+	                } else {
+	                    console.log('Successfully created ' + userId);
+	                    if (err) {
+	                        console.log(err, 'error');
+	                    } else if (user) {
+	                        // logged in!
+	                        uid = user.uid;
+	                        console.log('logged in with id', uid);
+	                        base.post('users/' + uid, {
+	                            data: {
+	                                name: user.google.displayName,
+	                                provider: user.provider,
+	                                uid: uid,
+	                                username: 'name',
+	                                profession: 'profession',
+	                                about: 'about you'
+	                            },
+	                            then: function then() {
+	                                _reactRouter.hashHistory.push('/profile');
+	                            }
+	                        });
+	                    } else {
+	                        _reactRouter.hashHistory.push('/');
 	                    }
+	                }
+	            }
+
+	            // Tries to set /users/<userId> to the specified data, but only
+	            // if there's no data there already.
+	            function tryCreateUser(userId, userData) {
+	                var usersRef = new Firebase('https://commoni.firebaseio.com/users');
+	                usersRef.child(userId).transaction(function (currentUserData) {
+	                    if (currentUserData === null) return userData;
+	                }, function (error, committed) {
+	                    userCreated(userData, committed);
 	                });
-	                _reactRouter.hashHistory.push('/profile');
-	            } else {
-	                // logged out
 	            }
 	        });
 	    },
@@ -25006,6 +25049,17 @@
 	        );
 	    }
 	});
+
+	function authDataCallback(authData) {
+	    if (authData) {
+	        console.log("User " + authData.uid + " is logged in with " + authData.provider);
+	    } else {
+	        console.log("User is logged out");
+	    }
+	}
+
+	var ref = new Firebase("https://commoni.firebaseio.com/");
+	ref.onAuth(authDataCallback);
 
 	exports.default = LogIn;
 
@@ -26071,13 +26125,12 @@
 	    },
 	    componentWillMount: function componentWillMount() {
 	        // Two way data binding
-
-	        if (authData) {
-	            this.ref = base.syncState('users/' + authData.uid + '/username/', {
-	                context: this,
-	                state: 'username'
-	            });
-	        }
+	        var authData = base.getAuth();
+	        var uid = authData.uid;
+	        this.ref = base.syncState('users/' + uid + '/username/', {
+	            context: this,
+	            state: 'username'
+	        });
 	    },
 	    componentWillUnmount: function componentWillUnmount() {
 	        base.removeBinding(this.ref);
@@ -26108,14 +26161,13 @@
 	        };
 	    },
 	    componentWillMount: function componentWillMount() {
-
 	        // Two way data binding
-	        if (authData) {
-	            this.ref2 = base.syncState('users/' + authData.uid + '/profession/', {
-	                context: this,
-	                state: 'profession'
-	            });
-	        }
+	        var authData = base.getAuth();
+	        var uid = authData.uid;
+	        this.ref2 = base.syncState('users/' + uid + '/profession/', {
+	            context: this,
+	            state: 'profession'
+	        });
 	    },
 	    componentWillUnmount: function componentWillUnmount() {
 	        base.removeBinding(this.ref2);
@@ -26489,12 +26541,12 @@
 	    },
 	    componentWillMount: function componentWillMount() {
 	        // Two way data binding
-	        if (authData) {
-	            this.ref = base.syncState('users/' + authData.uid + '/about/', {
-	                context: this,
-	                state: 'about'
-	            });
-	        }
+	        var authData = base.getAuth();
+	        var uid = authData.uid;
+	        this.ref = base.syncState('users/' + uid + '/about/', {
+	            context: this,
+	            state: 'about'
+	        });
 	    },
 	    componentWillUnmount: function componentWillUnmount() {
 	        base.removeBinding(this.ref);

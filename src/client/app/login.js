@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, Router, browserHistory,hashHistory } from 'react-router';
 import Rebase from 're-base';
 var base = Rebase.createClass('https://commoni.firebaseio.com/');
+var authData = base.getAuth();
 
 //FIND OUT HOW TO PASS VALUES FROM OTHER COMPONENTS
 
@@ -33,6 +34,9 @@ var LogIn = React.createClass ({
  <li><Link onClick={this.handleLogin} className="filledBtn" to="/profile">SIGN IN</Link></li>
  <li><Link onClick={this.getInitialState} className="transBtn" to="/">LOG OUT</Link></li>
  */
+
+
+
 var Li = React.createClass({
     getInitialState: function(){
         return {
@@ -40,28 +44,70 @@ var Li = React.createClass({
         }
     },
     handleLogin: function (e){
-        var uid = null;
         e.preventDefault();
+
+        var uid = null;
+        var test = null;
         base.authWithOAuthPopup('google', function(err, user) {
-            if (err) {
-                console.log(err, 'error');
-            } else if (user) {
-                // logged in!
-                uid = user.uid;
-                console.log('logged in with id', uid);
-                base.post('users/' + uid, {
-                    data: {
-                        name: user.google.displayName,
-                        provider: user.provider,
-                        uid: uid,
-                        about: 'About you',
-                        profession: 'Your profession',
-                        username: 'Your Name'
+
+            go();
+
+            function go() {
+                var userId = user.uid;
+                var userData = {
+                    name: user.google.displayName,
+                    provider: user.provider,
+                    uid: uid,
+                    username: 'name',
+                    profession: 'profession',
+                    about: 'about you'
+                };
+                tryCreateUser(userId,userData);
+            }
+
+            var USERS_LOCATION = 'https://commoni.firebaseio.com/';
+
+            function userCreated(userId, success) {
+                if (!success) {
+                    console.log('user ' + userId + ' already exists!');
+                    hashHistory.push('/profile')
+                } else {
+                    console.log('Successfully created ' + userId);
+                    if (err) {
+                        console.log(err, 'error');
+                    } else if (user) {
+                        // logged in!
+                        uid = user.uid;
+                        console.log('logged in with id', uid);
+                        base.post('users/' + uid, {
+                            data: {
+                                name: user.google.displayName,
+                                provider: user.provider,
+                                uid: uid,
+                                username: 'name',
+                                profession: 'profession',
+                                about: 'about you'
+                            },
+                            then(){
+                                hashHistory.push('/profile')
+                            }
+                        });
+                    }else {
+                        hashHistory.push('/');
                     }
+                }
+            }
+
+// Tries to set /users/<userId> to the specified data, but only
+// if there's no data there already.
+            function tryCreateUser(userId, userData) {
+                var usersRef = new Firebase('https://commoni.firebaseio.com/users');
+                usersRef.child(userId).transaction(function(currentUserData) {
+                    if (currentUserData === null)
+                        return userData;
+                }, function(error, committed) {
+                    userCreated(userData, committed);
                 });
-                hashHistory.push('/profile')
-            } else {
-                // logged out
             }
         });
     },
@@ -86,6 +132,18 @@ var Lo = React.createClass({
         );
     }
 });
+
+
+function authDataCallback(authData) {
+    if (authData) {
+        console.log("User " + authData.uid + " is logged in with " + authData.provider);
+    } else {
+        console.log("User is logged out");
+    }
+}
+
+var ref = new Firebase("https://commoni.firebaseio.com/");
+ref.onAuth(authDataCallback);
 
 
 export default LogIn;

@@ -3,7 +3,6 @@ import Rebase from 're-base';
 var base = Rebase.createClass('https://commoni.firebaseio.com/');
 var authData = base.getAuth();
 
-
 var Profile = React.createClass({
     render: function(){
         return (
@@ -38,13 +37,12 @@ var Username = React.createClass({
     },
     componentWillMount: function() {
         // Two way data binding
-
-        if(authData){
-            this.ref = base.syncState('users/' + authData.uid + '/username/', {
+        var authData = base.getAuth();
+        var uid = authData.uid;
+            this.ref = base.syncState('users/' + uid + '/username/', {
                 context: this,
                 state: 'username'
             });
-        }
     },
     componentWillUnmount(){
         base.removeBinding(this.ref);
@@ -70,14 +68,13 @@ var Profession = React.createClass({
         };
     },
     componentWillMount: function() {
-
         // Two way data binding
-        if(authData) {
-            this.ref2 = base.syncState('users/' + authData.uid + '/profession/', {
+        var authData = base.getAuth();
+        var uid = authData.uid;
+            this.ref2 = base.syncState('users/' + uid + '/profession/', {
                 context: this,
                 state: 'profession'
             });
-        }
     },
     componentWillUnmount(){
         base.removeBinding(this.ref2)
@@ -323,12 +320,12 @@ var UserProfile = React.createClass({
     },
     componentWillMount: function() {
         // Two way data binding
-        if(authData) {
-            this.ref = base.syncState('users/' + authData.uid + '/about/', {
+        var authData = base.getAuth();
+        var uid = authData.uid;
+            this.ref = base.syncState('users/' + uid + '/about/', {
                 context: this,
                 state: 'about'
             });
-        }
     },
     componentWillUnmount(){
         base.removeBinding(this.ref);
