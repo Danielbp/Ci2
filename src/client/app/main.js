@@ -35,30 +35,9 @@ var SearchBox = React.createClass({
                        className="Search"
                        placeholder="Search Name"
                        value={ this.state.query }
-                       onChange={ this.doSearch }/>);
+                       onChange={ this.doSearch }
+        />);
     }
-});
-
-var Container = React.createClass({
-    getInitialState: function() {
-        return {
-            sweden: "sweden",
-            stockholm: "stockholm"
-
-        };
-    },
-    _onSearch: function(query) {
-        console.log(query);
-        var test = query;
-    },
-    render: function(){
-        return (
-            <div className="container">
-
-            </div>
-        );
-    }
-
 });
 
 var Header = React.createClass({
@@ -72,6 +51,7 @@ var Header = React.createClass({
                     <li><Link className="active" to="/">Home</Link></li>
                     <li><Link to="/contact">Contact</Link></li>
                     <li><Link to="/about">About</Link></li>
+                    <li><Link to="/search">Common Interest!</Link></li>
                 </ul>
                 <LogIn />
             </header>
@@ -79,5 +59,4 @@ var Header = React.createClass({
     }
 });
 
-export default Container;
 export default Header;

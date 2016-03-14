@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, Router, browserHistory,hashHistory } from 'react-router';
 import Rebase from 're-base';
 var base = Rebase.createClass('https://commoni.firebaseio.com/');
-var authData = base.getAuth();
 
 //FIND OUT HOW TO PASS VALUES FROM OTHER COMPONENTS
 
@@ -10,20 +9,30 @@ var LogIn = React.createClass ({
     getInitialState: function() {
         return {
             login: true,
-            logout: false
+            logout: false,
+            profile: false
         };
     },
     onLogin: function() {
         this.setState({
-            login: !this.state.login,
-            logout: !this.state.logout
+            login: false,
+            logout: true,
+            profile: true
+        });
+    },
+    onLogout: function() {
+        this.setState({
+            login: true,
+            logout: false,
+            profile: false
         });
     },
     render : function(){
         return (
-            <ul  className="login" onClick={this.onLogin}>
-                { this.state.login ? <Li/> : null }
-                { this.state.logout ? <Lo/> : null }
+            <ul  className="login">
+                <li onClick={this.onLogin}>{ this.state.login ? <Li/> : null }</li>
+                <li onClick={this.onLogout}>{ this.state.logout ? <Lo/>: null}</li>
+                <li>{ this.state.profile ? <Hello/> : null}</li>
             </ul>
         );
     }
@@ -38,11 +47,6 @@ var LogIn = React.createClass ({
 
 
 var Li = React.createClass({
-    getInitialState: function(){
-        return {
-
-        }
-    },
     handleLogin: function (e){
         e.preventDefault();
 
@@ -64,8 +68,6 @@ var Li = React.createClass({
                 };
                 tryCreateUser(userId,userData);
             }
-
-            var USERS_LOCATION = 'https://commoni.firebaseio.com/';
 
             function userCreated(userId, success) {
                 if (!success) {
@@ -110,11 +112,11 @@ var Li = React.createClass({
                 });
             }
         });
+
     },
     render: function() {
         return (
-
-            <li><Link onClick={this.handleLogin} className="filledBtn" to="/profile" >SIGN IN</Link></li>
+            <Link onClick={this.handleLogin} className="filledBtn" to="/profile" >SIGN IN</Link>
 
         );
     }
@@ -128,22 +130,26 @@ var Lo = React.createClass({
     },
     render: function() {
         return (
-            <li><Link onClick={this.handleLogout} className="transBtn" to="/">LOG OUT</Link></li>
+            <Link onClick={this.handleLogout} className="transBtn" to="/">LOG OUT</Link>
+
+        );
+    }
+});
+
+var Hello = React.createClass({
+    profileClick: function(a){
+        a.preventDefault();
+        hashHistory.push('/profile')
+    },
+    render: function() {
+        return (
+            <Link onCLick={this.profileClick} className="filledBtn" to="/profile">Profile</Link>
+
         );
     }
 });
 
 
-function authDataCallback(authData) {
-    if (authData) {
-        console.log("User " + authData.uid + " is logged in with " + authData.provider);
-    } else {
-        console.log("User is logged out");
-    }
-}
-
-var ref = new Firebase("https://commoni.firebaseio.com/");
-ref.onAuth(authDataCallback);
 
 
 export default LogIn;

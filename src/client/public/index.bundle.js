@@ -74,6 +74,10 @@
 
 	var _landingpage2 = _interopRequireDefault(_landingpage);
 
+	var _search = __webpack_require__(226);
+
+	var _search2 = _interopRequireDefault(_search);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	(0, _reactDom.render)(_react2.default.createElement(
@@ -85,6 +89,7 @@
 	        _react2.default.createElement(_reactRouter.IndexRoute, { component: _landingpage2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/about', component: _about2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/contact', component: _contact2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/search', component: _search2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/profile', component: _profile2.default })
 	    )
 	), document.getElementById('app'));
@@ -24810,28 +24815,9 @@
 	            className: 'Search',
 	            placeholder: 'Search Name',
 	            value: this.state.query,
-	            onChange: this.doSearch });
+	            onChange: this.doSearch
+	        });
 	    }
-	});
-
-	var Container = _react2.default.createClass({
-	    displayName: 'Container',
-
-	    getInitialState: function getInitialState() {
-	        return {
-	            sweden: "sweden",
-	            stockholm: "stockholm"
-
-	        };
-	    },
-	    _onSearch: function _onSearch(query) {
-	        console.log(query);
-	        var test = query;
-	    },
-	    render: function render() {
-	        return _react2.default.createElement('div', { className: 'container' });
-	    }
-
 	});
 
 	var Header = _react2.default.createClass({
@@ -24875,6 +24861,15 @@
 	                        { to: '/about' },
 	                        'About'
 	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/search' },
+	                        'Common Interest!'
+	                    )
 	                )
 	            ),
 	            _react2.default.createElement(_login2.default, null)
@@ -24882,7 +24877,6 @@
 	    }
 	});
 
-	exports.default = Container;
 	exports.default = Header;
 
 /***/ },
@@ -24908,7 +24902,6 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var base = _reBase2.default.createClass('https://commoni.firebaseio.com/');
-	var authData = base.getAuth();
 
 	//FIND OUT HOW TO PASS VALUES FROM OTHER COMPONENTS
 
@@ -24918,21 +24911,43 @@
 	    getInitialState: function getInitialState() {
 	        return {
 	            login: true,
-	            logout: false
+	            logout: false,
+	            profile: false
 	        };
 	    },
 	    onLogin: function onLogin() {
 	        this.setState({
-	            login: !this.state.login,
-	            logout: !this.state.logout
+	            login: false,
+	            logout: true,
+	            profile: true
+	        });
+	    },
+	    onLogout: function onLogout() {
+	        this.setState({
+	            login: true,
+	            logout: false,
+	            profile: false
 	        });
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
 	            'ul',
-	            { className: 'login', onClick: this.onLogin },
-	            this.state.login ? _react2.default.createElement(Li, null) : null,
-	            this.state.logout ? _react2.default.createElement(Lo, null) : null
+	            { className: 'login' },
+	            _react2.default.createElement(
+	                'li',
+	                { onClick: this.onLogin },
+	                this.state.login ? _react2.default.createElement(Li, null) : null
+	            ),
+	            _react2.default.createElement(
+	                'li',
+	                { onClick: this.onLogout },
+	                this.state.logout ? _react2.default.createElement(Lo, null) : null
+	            ),
+	            _react2.default.createElement(
+	                'li',
+	                null,
+	                this.state.profile ? _react2.default.createElement(Hello, null) : null
+	            )
 	        );
 	    }
 
@@ -24946,9 +24961,6 @@
 	var Li = _react2.default.createClass({
 	    displayName: 'Li',
 
-	    getInitialState: function getInitialState() {
-	        return {};
-	    },
 	    handleLogin: function handleLogin(e) {
 	        e.preventDefault();
 
@@ -24970,8 +24982,6 @@
 	                };
 	                tryCreateUser(userId, userData);
 	            }
-
-	            var USERS_LOCATION = 'https://commoni.firebaseio.com/';
 
 	            function userCreated(userId, success) {
 	                if (!success) {
@@ -25018,13 +25028,9 @@
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
-	            'li',
-	            null,
-	            _react2.default.createElement(
-	                _reactRouter.Link,
-	                { onClick: this.handleLogin, className: 'filledBtn', to: '/profile' },
-	                'SIGN IN'
-	            )
+	            _reactRouter.Link,
+	            { onClick: this.handleLogin, className: 'filledBtn', to: '/profile' },
+	            'SIGN IN'
 	        );
 	    }
 	});
@@ -25039,27 +25045,28 @@
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
-	            'li',
-	            null,
-	            _react2.default.createElement(
-	                _reactRouter.Link,
-	                { onClick: this.handleLogout, className: 'transBtn', to: '/' },
-	                'LOG OUT'
-	            )
+	            _reactRouter.Link,
+	            { onClick: this.handleLogout, className: 'transBtn', to: '/' },
+	            'LOG OUT'
 	        );
 	    }
 	});
 
-	function authDataCallback(authData) {
-	    if (authData) {
-	        console.log("User " + authData.uid + " is logged in with " + authData.provider);
-	    } else {
-	        console.log("User is logged out");
-	    }
-	}
+	var Hello = _react2.default.createClass({
+	    displayName: 'Hello',
 
-	var ref = new Firebase("https://commoni.firebaseio.com/");
-	ref.onAuth(authDataCallback);
+	    profileClick: function profileClick(a) {
+	        a.preventDefault();
+	        _reactRouter.hashHistory.push('/profile');
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            _reactRouter.Link,
+	            { onCLick: this.profileClick, className: 'filledBtn', to: '/profile' },
+	            'Profile'
+	        );
+	    }
+	});
 
 	exports.default = LogIn;
 
@@ -25931,7 +25938,7 @@
 	                _react2.default.createElement(
 	                    'p',
 	                    null,
-	                    'A way to find friends and like-minded people with emia, chatt or Meetups'
+	                    'A way to find like-minded people through chatt or Meetups'
 	                ),
 	                _react2.default.createElement(
 	                    'ul',
@@ -26075,7 +26082,6 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var base = _reBase2.default.createClass('https://commoni.firebaseio.com/');
-	var authData = base.getAuth();
 
 	var Profile = _react2.default.createClass({
 	    displayName: 'Profile',
@@ -26289,7 +26295,7 @@
 
 	});
 
-	var firebaseUrl = "https://commoni.firebaseio.com/";
+	var firebaseUrl = "https://commoni.firebaseio.com/users";
 
 	var CommentBox = _react2.default.createClass({
 	    displayName: 'CommentBox',
@@ -26310,7 +26316,10 @@
 	    componentWillMount: function componentWillMount() {
 	        // Here we bind the component to Firebase and it handles all data updates,
 	        // no need to poll as in the React example.
-	        this.bindAsArray(new Firebase(firebaseUrl + "commentBox"), "data");
+
+	        var authData = base.getAuth();
+	        var uid = authData.uid;
+	        this.bindAsArray(new Firebase(firebaseUrl + '/' + uid + '/' + "commentBox"), "data");
 	    },
 
 	    render: function render() {
@@ -26753,6 +26762,411 @@
 
 	 });
 	 */
+
+/***/ },
+/* 226 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reBase = __webpack_require__(219);
+
+	var _reBase2 = _interopRequireDefault(_reBase);
+
+	var _reactAddonsCreateFragment = __webpack_require__(227);
+
+	var _reactAddonsCreateFragment2 = _interopRequireDefault(_reactAddonsCreateFragment);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var base = _reBase2.default.createClass('https://commoni.firebaseio.com/');
+
+	var Search = _react2.default.createClass({
+	    displayName: 'Search',
+
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'main',
+	            { className: 'main' },
+	            _react2.default.createElement(
+	                'h1',
+	                null,
+	                'Search'
+	            ),
+	            _react2.default.createElement(SearchBox, null)
+	        );
+	    }
+
+	});
+
+	var SearchBox = _react2.default.createClass({
+	    displayName: 'SearchBox',
+
+	    mixins: [ReactFireMixin],
+	    getInitialState: function getInitialState() {
+	        return {
+	            users: [],
+	            showUserProfile: true,
+	            showUserSkills: false,
+	            showUserComments: false
+
+	        };
+	    },
+	    onClickProfile: function onClickProfile() {
+	        this.setState({
+	            showUserProfile: true,
+	            showUserSkills: false,
+	            showUserComments: false
+	        });
+	    },
+	    onClickSkills: function onClickSkills() {
+	        this.setState({
+	            showUserSkills: true,
+	            showUserProfile: false,
+	            showUserComments: false
+	        });
+	    },
+	    onClickMessage: function onClickMessage() {
+	        this.setState({
+	            showUserComments: true,
+	            showUserProfile: false,
+	            showUserSkills: false
+	        });
+	    },
+	    componentWillMount: function componentWillMount() {
+	        var ref = new Firebase('https://commoni.firebaseio.com/users');
+	        this.bindAsArray(ref, "users");
+	    },
+	    render: function render() {
+	        var users = this.state.users.map(function (users, i) {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'profile-container', obj: users['.key'], key: i },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'profile-auth' },
+	                    _react2.default.createElement('div', { className: 'user-avatar' }),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'user-name-box' },
+	                        _react2.default.createElement(
+	                            'h4',
+	                            null,
+	                            users.username
+	                        ),
+	                        _react2.default.createElement(
+	                            'h5',
+	                            null,
+	                            users.profession
+	                        )
+	                    ),
+	                    _react2.default.createElement('div', { className: 'user-social-media' })
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'profile-nav' },
+	                    _react2.default.createElement(
+	                        'ul',
+	                        { className: 'user-nav' },
+	                        _react2.default.createElement(
+	                            'li',
+	                            null,
+	                            _react2.default.createElement(
+	                                'a',
+	                                { onClick: this.onClickProfile },
+	                                _react2.default.createElement('i', { className: 'fa fa-user' })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'li',
+	                            null,
+	                            _react2.default.createElement(
+	                                'a',
+	                                { onClick: this.onClickSkills },
+	                                _react2.default.createElement('i', { className: 'fa fa-diamond' })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'li',
+	                            null,
+	                            _react2.default.createElement(
+	                                'a',
+	                                { onClick: this.onClickMessage },
+	                                _react2.default.createElement('i', { className: 'fa fa-envelope-o' })
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'li',
+	                            null,
+	                            _react2.default.createElement(
+	                                'a',
+	                                null,
+	                                _react2.default.createElement('i', { className: 'fa fa-comment' })
+	                            )
+	                        )
+	                    )
+	                ),
+	                this.state.showUserProfile ? _react2.default.createElement(
+	                    'div',
+	                    { className: 'profile-info' },
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        _react2.default.createElement(
+	                            'strong',
+	                            null,
+	                            'About Me'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        users.about
+	                    )
+	                ) : null,
+	                this.state.showUserSkills ? _react2.default.createElement(UserSkills2, null) : null,
+	                this.state.showUserComments ? _react2.default.createElement(CommentBox, null) : null
+	            );
+	        }.bind(this));
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'wrap-profiles' },
+	            users
+	        );
+	    }
+
+	});
+
+	/*
+	 <div className="profile-nav">
+	 <ul className="user-nav">
+	 <li><a onClick={this.onClickProfile}><i className="fa fa-user"></i></a></li>
+	 <li><a onClick={this.onClickSkills}><i className="fa fa-diamond"></i></a></li>
+	 <li><a onClick={this.onClickMessage}><i className="fa fa-envelope-o"></i></a></li>
+	 <li><a ><i className="fa fa-comment"></i></a></li>
+	 </ul>
+	 </div>
+	 */
+
+	var Test = _react2.default.createClass({
+	    displayName: 'Test',
+
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'profile-nav' },
+	            _react2.default.createElement(
+	                'ul',
+	                { className: 'user-nav' },
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        'a',
+	                        { onClick: this.props.onClickProfile },
+	                        _react2.default.createElement('i', { className: 'fa fa-user' })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        'a',
+	                        { onClick: this.props.onClickSkills },
+	                        _react2.default.createElement('i', { className: 'fa fa-diamond' })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        'a',
+	                        { onClick: this.props.onClickMessage },
+	                        _react2.default.createElement('i', { className: 'fa fa-envelope-o' })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        'a',
+	                        null,
+	                        _react2.default.createElement('i', { className: 'fa fa-comment' })
+	                    )
+	                )
+	            )
+	        );
+	    }
+	});
+
+	var UserProfile = _react2.default.createClass({
+	    displayName: 'UserProfile',
+
+	    mixins: [ReactFireMixin],
+	    getInitialState: function getInitialState() {
+	        return {
+	            users: []
+	        };
+	    },
+	    componentWillMount: function componentWillMount() {
+	        var ref = new Firebase('https://commoni.firebaseio.com/users');
+	        this.bindAsArray(ref, "users");
+	    },
+	    render: function render() {
+	        var users = this.state.users.map(function (users) {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'profile-info', key: users['.key'] },
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement(
+	                        'strong',
+	                        null,
+	                        'About Me'
+	                    )
+	                ),
+	                _react2.default.createElement('textarea', {
+	                    type: 'text',
+	                    value: users.about
+	                })
+	            );
+	        });
+	        return _react2.default.createElement(
+	            'div',
+	            null,
+	            users
+	        );
+	    }
+
+	});
+
+	var CommentBox = _react2.default.createClass({
+	    displayName: 'CommentBox',
+
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'messageBox' },
+	            _react2.default.createElement(
+	                'p',
+	                null,
+	                _react2.default.createElement(
+	                    'strong',
+	                    null,
+	                    'Message'
+	                )
+	            )
+	        );
+	    }
+
+	});
+
+	var UserSkills2 = _react2.default.createClass({
+	    displayName: 'UserSkills2',
+
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'profile-info' },
+	            _react2.default.createElement(
+	                'p',
+	                null,
+	                _react2.default.createElement(
+	                    'strong',
+	                    null,
+	                    'My Skills'
+	                )
+	            )
+	        );
+	    }
+	});
+
+	exports.default = Search;
+
+/***/ },
+/* 227 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(228).create;
+
+/***/ },
+/* 228 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactFragment
+	 */
+
+	'use strict';
+
+	var ReactChildren = __webpack_require__(110);
+	var ReactElement = __webpack_require__(42);
+
+	var emptyFunction = __webpack_require__(15);
+	var invariant = __webpack_require__(13);
+	var warning = __webpack_require__(25);
+
+	/**
+	 * We used to allow keyed objects to serve as a collection of ReactElements,
+	 * or nested sets. This allowed us a way to explicitly key a set a fragment of
+	 * components. This is now being replaced with an opaque data structure.
+	 * The upgrade path is to call React.addons.createFragment({ key: value }) to
+	 * create a keyed fragment. The resulting data structure is an array.
+	 */
+
+	var numericPropertyRegex = /^\d+$/;
+
+	var warnedAboutNumeric = false;
+
+	var ReactFragment = {
+	  // Wrap a keyed object in an opaque proxy that warns you if you access any
+	  // of its properties.
+	  create: function (object) {
+	    if (typeof object !== 'object' || !object || Array.isArray(object)) {
+	      process.env.NODE_ENV !== 'production' ? warning(false, 'React.addons.createFragment only accepts a single object. Got: %s', object) : undefined;
+	      return object;
+	    }
+	    if (ReactElement.isValidElement(object)) {
+	      process.env.NODE_ENV !== 'production' ? warning(false, 'React.addons.createFragment does not accept a ReactElement ' + 'without a wrapper object.') : undefined;
+	      return object;
+	    }
+
+	    !(object.nodeType !== 1) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'React.addons.createFragment(...): Encountered an invalid child; DOM ' + 'elements are not valid children of React components.') : invariant(false) : undefined;
+
+	    var result = [];
+
+	    for (var key in object) {
+	      if (process.env.NODE_ENV !== 'production') {
+	        if (!warnedAboutNumeric && numericPropertyRegex.test(key)) {
+	          process.env.NODE_ENV !== 'production' ? warning(false, 'React.addons.createFragment(...): Child objects should have ' + 'non-numeric keys so ordering is preserved.') : undefined;
+	          warnedAboutNumeric = true;
+	        }
+	      }
+	      ReactChildren.mapIntoWithKeyPrefixInternal(object[key], result, key, emptyFunction.thatReturnsArgument);
+	    }
+
+	    return result;
+	  }
+	};
+
+	module.exports = ReactFragment;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }
 /******/ ]);

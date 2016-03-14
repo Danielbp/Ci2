@@ -8,7 +8,7 @@ var Landing = React.createClass({
                 <main className="main" >
                     <div className="wrap-content">
                         <h1>Common interest finder</h1>
-                        <p>A way to find friends and like-minded people with emia, chatt or Meetups</p>
+                        <p>A way to find like-minded people through chatt or Meetups</p>
                         <ul className="info">
                             <li><Link className="transBtn" to="/about">Learn More</Link></li>
                             <li><Link className="filledBtn" to="/about">Continue</Link></li>

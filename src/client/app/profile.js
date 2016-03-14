@@ -1,7 +1,6 @@
 import React from 'react';
 import Rebase from 're-base';
 var base = Rebase.createClass('https://commoni.firebaseio.com/');
-var authData = base.getAuth();
 
 var Profile = React.createClass({
     render: function(){
@@ -153,7 +152,7 @@ var ProfileContainer = React.createClass({
 
 });
 
-var firebaseUrl = "https://commoni.firebaseio.com/";
+var firebaseUrl = "https://commoni.firebaseio.com/users";
 
 var CommentBox = React.createClass({
     mixins: [ReactFireMixin],
@@ -172,7 +171,10 @@ var CommentBox = React.createClass({
     componentWillMount: function() {
         // Here we bind the component to Firebase and it handles all data updates,
         // no need to poll as in the React example.
-        this.bindAsArray(new Firebase(firebaseUrl + "commentBox"), "data");
+
+        var authData = base.getAuth();
+        var uid = authData.uid;
+        this.bindAsArray(new Firebase(firebaseUrl + '/'  + uid + '/' + "commentBox"), "data");
     },
 
     render: function() {
