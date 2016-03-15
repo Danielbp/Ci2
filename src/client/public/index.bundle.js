@@ -26811,6 +26811,62 @@
 	    displayName: 'SearchBox',
 
 	    mixins: [ReactFireMixin],
+	    componentWillMount: function componentWillMount() {
+	        var ref = new Firebase('https://commoni.firebaseio.com/users');
+	        this.bindAsArray(ref, "users");
+	    },
+	    render: function render() {
+	        var users = this.state.users.map(function (users, i) {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'profile-container', obj: users['.key'], key: i },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'profile-auth' },
+	                    _react2.default.createElement('div', { className: 'user-avatar' }),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'user-name-box' },
+	                        _react2.default.createElement(
+	                            'h4',
+	                            null,
+	                            users.username
+	                        ),
+	                        _react2.default.createElement(
+	                            'h5',
+	                            null,
+	                            users.profession
+	                        )
+	                    ),
+	                    _react2.default.createElement('div', { className: 'user-social-media' })
+	                ),
+	                _react2.default.createElement(UserNav, { about: users.about })
+	            );
+	        }.bind(this));
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'wrap-profiles' },
+	            users
+	        );
+	    }
+
+	});
+
+	/*
+	 <div className="profile-nav">
+	 <ul className="user-nav">
+	 <li><a onClick={this.onClickProfile}><i className="fa fa-user"></i></a></li>
+	 <li><a onClick={this.onClickSkills}><i className="fa fa-diamond"></i></a></li>
+	 <li><a onClick={this.onClickMessage}><i className="fa fa-envelope-o"></i></a></li>
+	 <li><a ><i className="fa fa-comment"></i></a></li>
+	 </ul>
+	 </div>
+	 */
+
+	var UserNav = _react2.default.createClass({
+	    displayName: 'UserNav',
+
+	    mixins: [ReactFireMixin],
 	    getInitialState: function getInitialState() {
 	        return {
 	            users: [],
@@ -26842,167 +26898,77 @@
 	        });
 	    },
 	    componentWillMount: function componentWillMount() {
-	        var ref = new Firebase('https://commoni.firebaseio.com/users');
+	        var ref = new Firebase('https://commoni.firebaseio.com/users/about');
 	        this.bindAsArray(ref, "users");
 	    },
 	    render: function render() {
-	        var users = this.state.users.map(function (users, i) {
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'profile-container', obj: users['.key'], key: i },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'profile-auth' },
-	                    _react2.default.createElement('div', { className: 'user-avatar' }),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'user-name-box' },
-	                        _react2.default.createElement(
-	                            'h4',
-	                            null,
-	                            users.username
-	                        ),
-	                        _react2.default.createElement(
-	                            'h5',
-	                            null,
-	                            users.profession
-	                        )
-	                    ),
-	                    _react2.default.createElement('div', { className: 'user-social-media' })
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'profile-nav' },
-	                    _react2.default.createElement(
-	                        'ul',
-	                        { className: 'user-nav' },
-	                        _react2.default.createElement(
-	                            'li',
-	                            null,
-	                            _react2.default.createElement(
-	                                'a',
-	                                { onClick: this.onClickProfile },
-	                                _react2.default.createElement('i', { className: 'fa fa-user' })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'li',
-	                            null,
-	                            _react2.default.createElement(
-	                                'a',
-	                                { onClick: this.onClickSkills },
-	                                _react2.default.createElement('i', { className: 'fa fa-diamond' })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'li',
-	                            null,
-	                            _react2.default.createElement(
-	                                'a',
-	                                { onClick: this.onClickMessage },
-	                                _react2.default.createElement('i', { className: 'fa fa-envelope-o' })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'li',
-	                            null,
-	                            _react2.default.createElement(
-	                                'a',
-	                                null,
-	                                _react2.default.createElement('i', { className: 'fa fa-comment' })
-	                            )
-	                        )
-	                    )
-	                ),
-	                this.state.showUserProfile ? _react2.default.createElement(
-	                    'div',
-	                    { className: 'profile-info' },
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        _react2.default.createElement(
-	                            'strong',
-	                            null,
-	                            'About Me'
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        users.about
-	                    )
-	                ) : null,
-	                this.state.showUserSkills ? _react2.default.createElement(UserSkills2, null) : null,
-	                this.state.showUserComments ? _react2.default.createElement(CommentBox, null) : null
-	            );
-	        }.bind(this));
 	        return _react2.default.createElement(
 	            'div',
-	            { className: 'wrap-profiles' },
-	            users
-	        );
-	    }
-
-	});
-
-	/*
-	 <div className="profile-nav">
-	 <ul className="user-nav">
-	 <li><a onClick={this.onClickProfile}><i className="fa fa-user"></i></a></li>
-	 <li><a onClick={this.onClickSkills}><i className="fa fa-diamond"></i></a></li>
-	 <li><a onClick={this.onClickMessage}><i className="fa fa-envelope-o"></i></a></li>
-	 <li><a ><i className="fa fa-comment"></i></a></li>
-	 </ul>
-	 </div>
-	 */
-
-	var Test = _react2.default.createClass({
-	    displayName: 'Test',
-
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'profile-nav' },
+	            null,
 	            _react2.default.createElement(
-	                'ul',
-	                { className: 'user-nav' },
+	                'div',
+	                { className: 'profile-nav' },
 	                _react2.default.createElement(
-	                    'li',
-	                    null,
+	                    'ul',
+	                    { className: 'user-nav' },
 	                    _react2.default.createElement(
-	                        'a',
-	                        { onClick: this.props.onClickProfile },
-	                        _react2.default.createElement('i', { className: 'fa fa-user' })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'a',
-	                        { onClick: this.props.onClickSkills },
-	                        _react2.default.createElement('i', { className: 'fa fa-diamond' })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'a',
-	                        { onClick: this.props.onClickMessage },
-	                        _react2.default.createElement('i', { className: 'fa fa-envelope-o' })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        'a',
+	                        'li',
 	                        null,
-	                        _react2.default.createElement('i', { className: 'fa fa-comment' })
+	                        _react2.default.createElement(
+	                            'a',
+	                            { onClick: this.onClickProfile },
+	                            _react2.default.createElement('i', { className: 'fa fa-user' })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'li',
+	                        null,
+	                        _react2.default.createElement(
+	                            'a',
+	                            { onClick: this.onClickSkills },
+	                            _react2.default.createElement('i', { className: 'fa fa-diamond' })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'li',
+	                        null,
+	                        _react2.default.createElement(
+	                            'a',
+	                            { onClick: this.onClickMessage },
+	                            _react2.default.createElement('i', { className: 'fa fa-envelope-o' })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'li',
+	                        null,
+	                        _react2.default.createElement(
+	                            'a',
+	                            null,
+	                            _react2.default.createElement('i', { className: 'fa fa-comment' })
+	                        )
 	                    )
 	                )
-	            )
+	            ),
+	            this.state.showUserProfile ? _react2.default.createElement(
+	                'div',
+	                { className: 'profile-info' },
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    _react2.default.createElement(
+	                        'strong',
+	                        null,
+	                        'About Me'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    this.props.text
+	                )
+	            ) : null,
+	            this.state.showUserSkills ? _react2.default.createElement(UserSkills2, null) : null,
+	            this.state.showUserComments ? _react2.default.createElement(CommentBox, null) : null
 	        );
 	    }
 	});
