@@ -104,7 +104,7 @@ var UserNav = React.createClass({
                         <li><a><i className="fa fa-comment"></i></a></li>
                     </ul>
                 </div>
-                { this.state.showUserProfile ? <UserProfile />: null }
+                { this.state.showUserProfile ? <UserProfile about={this.props.about} />: null }
                 { this.state.showUserSkills ? <UserSkills2 /> : null }
                 { this.state.showUserComments ? <CommentBox /> : null }
             </div>

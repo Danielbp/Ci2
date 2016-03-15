@@ -26949,24 +26949,7 @@
 	                    )
 	                )
 	            ),
-	            this.state.showUserProfile ? _react2.default.createElement(
-	                'div',
-	                { className: 'profile-info' },
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    _react2.default.createElement(
-	                        'strong',
-	                        null,
-	                        'About Me'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    this.props.text
-	                )
-	            ) : null,
+	            this.state.showUserProfile ? _react2.default.createElement(UserProfile, { about: this.props.about }) : null,
 	            this.state.showUserSkills ? _react2.default.createElement(UserSkills2, null) : null,
 	            this.state.showUserComments ? _react2.default.createElement(CommentBox, null) : null
 	        );
@@ -26987,32 +26970,25 @@
 	        this.bindAsArray(ref, "users");
 	    },
 	    render: function render() {
-	        var users = this.state.users.map(function (users) {
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'profile-info', key: users['.key'] },
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    _react2.default.createElement(
-	                        'strong',
-	                        null,
-	                        'About Me'
-	                    )
-	                ),
-	                _react2.default.createElement('textarea', {
-	                    type: 'text',
-	                    value: users.about
-	                })
-	            );
-	        });
 	        return _react2.default.createElement(
 	            'div',
-	            null,
-	            users
+	            { className: 'profile-info' },
+	            _react2.default.createElement(
+	                'p',
+	                null,
+	                _react2.default.createElement(
+	                    'strong',
+	                    null,
+	                    'About Me'
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'p',
+	                null,
+	                this.props.about
+	            )
 	        );
 	    }
-
 	});
 
 	var CommentBox = _react2.default.createClass({
