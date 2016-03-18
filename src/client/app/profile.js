@@ -244,6 +244,14 @@ var UserSkills = React.createClass({
             edit: "visible"
         };
     },
+    componentWillMount: function() {
+
+        var authData = base.getAuth();
+        var uid = authData.uid;
+        base.post('users/' + uid, {
+            data: {name: this.state.inputs}
+        });
+    },
     addInputField: function(e) {
         e.preventDefault();
 

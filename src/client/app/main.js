@@ -51,7 +51,7 @@ var Header = React.createClass({
                     <li><Link className="active" to="/">Home</Link></li>
                     <li><Link to="/contact">Contact</Link></li>
                     <li><Link to="/about">About</Link></li>
-                    <li><Link to="/search">Common Interest!</Link></li>
+                    <li><Link to="/search">Profiles</Link></li>
                 </ul>
                 <LogIn />
             </header>

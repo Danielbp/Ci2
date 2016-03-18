@@ -24868,7 +24868,7 @@
 	                    _react2.default.createElement(
 	                        _reactRouter.Link,
 	                        { to: '/search' },
-	                        'Common Interest!'
+	                        'Profiles'
 	                    )
 	                )
 	            ),
@@ -26414,6 +26414,14 @@
 	            edit: "visible"
 	        };
 	    },
+	    componentWillMount: function componentWillMount() {
+
+	        var authData = base.getAuth();
+	        var uid = authData.uid;
+	        base.post('users/' + uid, {
+	            data: { name: this.state.inputs }
+	        });
+	    },
 	    addInputField: function addInputField(e) {
 	        e.preventDefault();
 
@@ -26787,6 +26795,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var createFragment = __webpack_require__(227);
 	var base = _reBase2.default.createClass('https://commoni.firebaseio.com/');
 
 	var Search = _react2.default.createClass({
@@ -26799,7 +26808,7 @@
 	            _react2.default.createElement(
 	                'h1',
 	                null,
-	                'Search'
+	                'Profiles list'
 	            ),
 	            _react2.default.createElement(SearchBox, null)
 	        );
@@ -26811,6 +26820,15 @@
 	    displayName: 'SearchBox',
 
 	    mixins: [ReactFireMixin],
+	    getInitialState: function getInitialState() {
+	        return {
+	            users: [],
+	            showUserProfile: true,
+	            showUserSkills: false,
+	            showUserComments: false
+
+	        };
+	    },
 	    componentWillMount: function componentWillMount() {
 	        var ref = new Firebase('https://commoni.firebaseio.com/users');
 	        this.bindAsArray(ref, "users");
@@ -26840,7 +26858,7 @@
 	                    ),
 	                    _react2.default.createElement('div', { className: 'user-social-media' })
 	                ),
-	                _react2.default.createElement(UserNav, { about: users.about })
+	                _react2.default.createElement(UserNav, { about: users.about, skills: users })
 	            );
 	        }.bind(this));
 	        return _react2.default.createElement(
@@ -26866,10 +26884,8 @@
 	var UserNav = _react2.default.createClass({
 	    displayName: 'UserNav',
 
-	    mixins: [ReactFireMixin],
 	    getInitialState: function getInitialState() {
 	        return {
-	            users: [],
 	            showUserProfile: true,
 	            showUserSkills: false,
 	            showUserComments: false
@@ -26896,10 +26912,6 @@
 	            showUserProfile: false,
 	            showUserSkills: false
 	        });
-	    },
-	    componentWillMount: function componentWillMount() {
-	        var ref = new Firebase('https://commoni.firebaseio.com/users/about');
-	        this.bindAsArray(ref, "users");
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
@@ -26950,7 +26962,7 @@
 	                )
 	            ),
 	            this.state.showUserProfile ? _react2.default.createElement(UserProfile, { about: this.props.about }) : null,
-	            this.state.showUserSkills ? _react2.default.createElement(UserSkills2, null) : null,
+	            this.state.showUserSkills ? _react2.default.createElement(UserSkills2, { skills: this.props.skills }) : null,
 	            this.state.showUserComments ? _react2.default.createElement(CommentBox, null) : null
 	        );
 	    }
@@ -27016,6 +27028,15 @@
 	    displayName: 'UserSkills2',
 
 	    render: function render() {
+	        var test = this.props.skills.items;
+	        var pairs = [];
+	        for (var key in test) {
+	            pairs.push(_react2.default.createElement(
+	                'li',
+	                { key: key },
+	                (0, _reactAddonsCreateFragment2.default)(test[key])
+	            ));
+	        }
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'profile-info' },
@@ -27027,9 +27048,15 @@
 	                    null,
 	                    'My Skills'
 	                )
+	            ),
+	            _react2.default.createElement(
+	                'ul',
+	                null,
+	                pairs
 	            )
 	        );
 	    }
+
 	});
 
 	exports.default = Search;
